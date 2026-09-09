@@ -17,20 +17,20 @@ const columns = ({ constHandelDelete }) => [
     header: () => <div className='text-center font-bold'>Date</div>,
     cell: ({ row }) => <div className='text-center'>{row.getValue('date')}</div>,
   },
-  {
-    accessorKey: 'five_kg',
-    header: () => <div className='text-center font-bold'>5 KG</div>,
-    cell: ({ row }) => {
-      const filled = row.original.five_kg || 0;
-      const empty = row.original.empty_five_kg || 0;
-      const Package = row.original.is_package || 0;
-      return (
-        <div className='text-center'>
-          {filled} / { Package && filled ? 'P' : empty}
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorKey: 'five_kg',
+  //   header: () => <div className='text-center font-bold'>5 KG</div>,
+  //   cell: ({ row }) => {
+  //     const filled = row.original.five_kg || 0;
+  //     const empty = row.original.empty_five_kg || 0;
+  //     const Package = row.original.is_package || 0;
+  //     return (
+  //       <div className='text-center'>
+  //         {filled} / { Package && filled ? 'P' : empty}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorKey: 'twelve_kg',
     header: () => <div className='text-center font-bold'>12 KG</div>,
@@ -45,34 +45,34 @@ const columns = ({ constHandelDelete }) => [
       );
     },
   },
-  {
-    accessorKey: 'twentyfive_kg',
-    header: () => <div className='text-center font-bold'>25 KG</div>,
-    cell: ({ row }) => {
-      const filled = row.original.twentyfive_kg || 0;
-      const empty = row.original.empty_twentyfive_kg || 0;
-      const Package = row.original.is_package || 0;
-      return (
-        <div className='text-center'>
-          {filled} / { Package && filled>0 ? 'P' : empty}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'thirtythree_kg',
-    header: () => <div className='text-center font-bold'>33 KG</div>,
-    cell: ({ row }) => {
-      const filled = row.original.thirtythree_kg || 0;
-      const empty = row.original.empty_thirtythree_kg || 0;
-      const Package = row.original.is_package || 0;
-      return (
-        <div className='text-center'>
-          {filled} / { Package && filled>0 ? 'P' : empty}
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorKey: 'twentyfive_kg',
+  //   header: () => <div className='text-center font-bold'>25 KG</div>,
+  //   cell: ({ row }) => {
+  //     const filled = row.original.twentyfive_kg || 0;
+  //     const empty = row.original.empty_twentyfive_kg || 0;
+  //     const Package = row.original.is_package || 0;
+  //     return (
+  //       <div className='text-center'>
+  //         {filled} / { Package && filled>0 ? 'P' : empty}
+  //       </div>
+  //     );
+  //   },
+  // },
+  // {
+  //   accessorKey: 'thirtythree_kg',
+  //   header: () => <div className='text-center font-bold'>33 KG</div>,
+  //   cell: ({ row }) => {
+  //     const filled = row.original.thirtythree_kg || 0;
+  //     const empty = row.original.empty_thirtythree_kg || 0;
+  //     const Package = row.original.is_package || 0;
+  //     return (
+  //       <div className='text-center'>
+  //         {filled} / { Package && filled>0 ? 'P' : empty}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorKey: 'thirtyfive_kg',
     header: () => <div className='text-center font-bold'>35 KG</div>,
@@ -140,7 +140,7 @@ const columns = ({ constHandelDelete }) => [
       };
 
       return (
-        <div>
+        <div className='flex justify-center' >
           <ToggleGroup variant='outline' type='single'>
             <ToggleGroupItem className='cursor-pointer' value='delete' aria-label='Delete row' onClick={() => constHandelDelete(row.original.id)}>
               <Trash width={20} height={20} />

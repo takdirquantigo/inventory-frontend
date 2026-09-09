@@ -38,10 +38,10 @@ export default function EditSale() {
   const navigate = useNavigate();
 
   const fields = [
-    {label: '5 Kg', qty: 'five_kg', price: 'price_5_kg' },
+    // {label: '5 Kg', qty: 'five_kg', price: 'price_5_kg' },
     {label: '12 Kg', qty: 'twelve_kg', price: 'price_12_kg' },
-    {label: '25 Kg', qty: 'twentyfive_kg', price: 'price_25_kg' },
-    {label: '33 Kg', qty: 'thirtythree_kg', price: 'price_33_kg' },
+    // {label: '25 Kg', qty: 'twentyfive_kg', price: 'price_25_kg' },
+    // {label: '33 Kg', qty: 'thirtythree_kg', price: 'price_33_kg' },
     {label: '35 Kg', qty: 'thirtyfive_kg', price: 'price_35_kg' },
     {label: '45 Kg', qty: 'fourtyfive_kg', price: 'price_45_kg' },
   ];

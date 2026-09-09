@@ -167,7 +167,7 @@ const InvoiceA6 = ({ content }) => (
       <View style={styles.headerRow}>
         <View>
           <Text style={styles.logoInvoice}>Invoice</Text> <br />
-         <Text style={styles.headline}>Mohammad Enterprise</Text>
+         <Text style={styles.headline}>Al Falah Gas Service</Text>
         </View>
         <View style={styles.headerInfo}>
           <Text style={styles.headerTextRegular}>{content?.date}</Text>
@@ -249,7 +249,7 @@ const InvoiceA6 = ({ content }) => (
 
       <View style={styles.footerContainer} fixed>
         <View style={styles.footerColumn}>
-          <Text style={styles.footerTitle}>Mohammad Enterprise</Text>
+          <Text style={styles.footerTitle}>Al Falah Gas Service</Text>
           <Text style={styles.footerDetailsBold}>Phone: 01792429367</Text>
           <Text style={styles.footerDetails}>Address: 336/B, Khilgaon, Dhaka</Text>
         </View>

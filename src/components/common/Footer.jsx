@@ -13,7 +13,7 @@ export default function Footer() {
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">MS</span>
             </div>
-            <span className="text-xl font-bold">Mohammad Enterprise</span>
+            <span className="text-xl font-bold">Al Falah Gas Service</span>
           </div>
           <p className="text-muted-foreground mb-4">
             Your trusted partner for premium LPG cylinders and home delivery services.
@@ -92,7 +92,7 @@ export default function Footer() {
       <Separator className="my-8" />
 
       <div className="flex flex-col md:flex-row justify-between items-center">
-        <p className="text-muted-foreground text-sm">© 2025 Mohammad Enterprise. All rights reserved.</p>
+        <p className="text-muted-foreground text-sm">© 2026 Al Falah Gas Service. All rights reserved.</p>
         
       </div>
     </div>

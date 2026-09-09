@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Save, CalendarIcon, ArrowLeft } from 'lucide-react';
+import { Save, CalendarIcon, ArrowLeft, UserPlus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import API from '@/config/config';
@@ -15,6 +15,7 @@ import { Switch } from '@/components/ui/switch';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import AddModal from '@/pages/admin/customer/components/AddModal';
 
 const animatedComponents = makeAnimated();
 
@@ -55,6 +56,7 @@ export default function AddSale() {
   const [isPackage, setIsPackage] = useState(false);
   const [isWholeSale, setIsWholeSale] = useState(false);
   const [isDatePopoverOpen, setIsDatePopoverOpen] = useState(false);
+  const [openCustomerModal, setOpenCustomerModal] = useState(false);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [customer, setCustomer] = useState(null);
@@ -97,17 +99,19 @@ export default function AddSale() {
     setValue('total', total);
   }, [totalPrice, otherCostAmount, setValue]);
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      const response = await API.get('api/customers/all-customers');
-      const responseData = response.data.data.map((item) => ({
-        value: item.id,
-        label: item.name,
-      }));
-      setCustomer(responseData);
-    };
-    fetchCustomers();
+  const fetchCustomers = useCallback(async () => {
+    const response = await API.get('api/customers/all-customers');
+    const responseData = response.data.data.map((item) => ({
+      value: item.id,
+      label: item.name,
+    }));
+    setCustomer(responseData);
+    return responseData;
   }, []);
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   /** Pre-select customer when opened from customer list (?customer_id=) */
   useEffect(() => {
@@ -133,6 +137,18 @@ export default function AddSale() {
     }
     clearParam();
   }, [customer, searchParams, setSearchParams]);
+
+  const handleCustomerCreated = async (data) => {
+    const options = await fetchCustomers();
+    const created = data?.customer;
+    if (!created?.id) return;
+    const match = options.find((c) => Number(c.value) === Number(created.id));
+    if (match) {
+      setSelectedCustomer(match);
+    } else {
+      setSelectedCustomer({ value: created.id, label: created.name });
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -193,27 +209,32 @@ export default function AddSale() {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <CardContent className='grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-6'>
-               <InputField id='five_kg' type='number' className='bg-white' label='5 KG' register={register} error={errors.five_kg} />
+              {/* 5 KG */}
+              {/* <InputField id='five_kg' type='number' className='bg-white' label='5 KG' register={register} error={errors.five_kg} />
               <InputField id='empty_five_kg' type='number' className='bg-white' label='Empty 5 KG' register={register} error={errors.empty_five_kg} />
-              <InputField id='price_5_kg' type='number' className='bg-white' label='Unit Price 5 KG' register={register} error={errors.price_5_kg} />
+              <InputField id='price_5_kg' type='number' className='bg-white' label='Unit Price 5 KG' register={register} error={errors.price_5_kg} /> */}
 
-
+              {/* 12 KG */}
               <InputField id='twelve_kg' type='number' className='bg-white' label='12 KG' register={register} error={errors.twelve_kg} />
               <InputField id='empty_twelve_kg' type='number' className='bg-white' label='Empty 12 KG' register={register} error={errors.empty_twelve_kg} />
               <InputField id='price_12_kg' type='number' className='bg-white' label='Unit Price 12 KG' register={register} error={errors.price_12_kg} />
 
-              <InputField id='twentyfive_kg' type='number' className='bg-white' label='25 KG' register={register} error={errors.twentyfive_kg} />
+              {/* 25 KG */}
+              {/* <InputField id='twentyfive_kg' type='number' className='bg-white' label='25 KG' register={register} error={errors.twentyfive_kg} />
               <InputField id='empty_twentyfive_kg' type='number' className='bg-white' label='Empty 25 KG' register={register} error={errors.empty_twentyfive_kg} />
-              <InputField id='price_25_kg' type='number' className='bg-white' label='Unit Price 25 KG' register={register} error={errors.price_25_kg} />
+              <InputField id='price_25_kg' type='number' className='bg-white' label='Unit Price 25 KG' register={register} error={errors.price_25_kg} /> */}
 
-              <InputField id='thirtythree_kg' type='number' className='bg-white' label='33 KG' register={register} error={errors.thirtythree_kg} />
+              {/* 33 KG */}
+              {/* <InputField id='thirtythree_kg' type='number' className='bg-white' label='33 KG' register={register} error={errors.thirtythree_kg} />
               <InputField id='empty_thirtythree_kg' type='number' className='bg-white' label='Empty 33 KG' register={register} error={errors.empty_thirtythree_kg} />
-              <InputField id='price_33_kg' type='number' className='bg-white' label='Unit Price 33 KG' register={register} error={errors.price_33_kg} />
+              <InputField id='price_33_kg' type='number' className='bg-white' label='Unit Price 33 KG' register={register} error={errors.price_33_kg} /> */}
 
+              {/* 35 KG */}
               <InputField id='thirtyfive_kg' type='number' className='bg-white' label='35 KG' register={register} error={errors.thirtyfive_kg} />
               <InputField id='empty_thirtyfive_kg' type='number' className='bg-white' label='Empty 35 KG' register={register} error={errors.empty_thirtyfive_kg} />
               <InputField id='price_35_kg' type='number' className='bg-white' label='Unit Price 35 KG' register={register} error={errors.price_35_kg} />
 
+              {/* 45 KG */}
               <InputField id='fourtyfive_kg' type='number' className='bg-white' label='45 KG' register={register} error={errors.fourtyfive_kg} />
               <InputField id='empty_fourtyfive_kg' type='number' className='bg-white' label='Empty 45 KG' register={register} error={errors.empty_fourtyfive_kg} />
               <InputField id='price_45_kg' type='number' className='bg-white' label='Unit Price 45 KG' register={register} error={errors.price_45_kg} />
@@ -227,9 +248,10 @@ export default function AddSale() {
               {/* Due (ReadOnly) */}
               <InputField id='due' type='number' className='bg-gray-100' label='Due' register={register} error={errors.due} readOnly />
 
-               <InputField id='other_cost_name' type='text' className='bg-white' label='Other Cost Name' register={register} error={errors.other_cost_name} />
-               <InputField id='other_cost_amount' type='text' className='bg-white' label='Other Cost Amount' register={register} error={errors.other_cost_amount} />
-               <InputField id='total' type='number' className='bg-gray-100' label='Total' register={register} error={errors.total} readOnly />
+              {/* Other Cost */}
+              <InputField id='other_cost_name' type='text' className='bg-white' label='Other Cost Name' register={register} error={errors.other_cost_name} />
+              <InputField id='other_cost_amount' type='text' className='bg-white' label='Other Cost Amount' register={register} error={errors.other_cost_amount} />
+              <InputField id='total' type='number' className='bg-gray-100' label='Total' register={register} error={errors.total} readOnly />
             </CardContent>
 
             {/* Date & Package */}
@@ -282,7 +304,15 @@ export default function AddSale() {
               />
             </div>
 
-            <CardFooter className='flex justify-end mt-4'>
+            <CardFooter className='flex justify-end gap-2 mt-4'>
+              <Button
+                type='button'
+                variant='outline'
+                onClick={() => setOpenCustomerModal(true)}
+                className='flex items-center gap-2'
+              >
+                <UserPlus className='w-4 h-4' /> Add New Customer
+              </Button>
               <Button type='submit' disabled={isSubmitting} className='flex items-center gap-2'>
                 <Save className='w-4 h-4' /> Save
               </Button>
@@ -290,6 +320,15 @@ export default function AddSale() {
           </form>
         </CardContent>
       </Card>
+
+      {openCustomerModal && (
+        <AddModal
+          openModal={openCustomerModal}
+          setOpenModal={setOpenCustomerModal}
+          title='Add Customer'
+          onSuccess={handleCustomerCreated}
+        />
+      )}
     </div>
   );
 }

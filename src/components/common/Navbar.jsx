@@ -11,7 +11,7 @@ export default function Navbar() {
           <div className='w-8 h-8 bg-primary rounded-full flex items-center justify-center'>
             <span className='text-primary-foreground font-bold text-sm'>MS</span>
           </div>
-          <span className='text-xl font-bold text-foreground'>MS MOHAMMAD ENTERPRICE</span>
+          <span className='text-xl font-bold text-foreground'>Al Falah Gas Service</span>
         </div>
         <nav className='hidden md:flex items-center space-x-6'>
           <a href='#products' className='text-muted-foreground hover:text-foreground transition-colors'>

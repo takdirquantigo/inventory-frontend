@@ -27,7 +27,7 @@ export default function AdminLayout() {
               <div className='w-8 h-8 bg-primary rounded-full flex items-center justify-center'>
                 <span className='text-primary-foreground font-bold text-sm'>G</span>
               </div>
-              <span className='text-lg font-bold text-sidebar-foreground'>Mohammad Enterprice</span>
+              <span className='text-lg font-bold text-sidebar-foreground'>Al Falah Gas Service</span>
             </div>
           </SidebarHeader>
 

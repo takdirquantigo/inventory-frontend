@@ -18,18 +18,23 @@ export default function AddModal({
   title,
   singleData,
   setSingleData,
+  onSuccess,
 }) {
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
+    defaultValues: {
+      password: '123456',
+    },
+  });
 
   const queryClient = useQueryClient();
 
   const onSubmit = async (data) => {
-    await toast.promise(
+    const res = await toast.promise(
       API.post('/api/customers', data),
       {
         loading: 'Saving...',
-        success: (res) => {
-          const loginId = res?.data?.customer_login_id;
+        success: (response) => {
+          const loginId = response?.data?.customer_login_id;
           return loginId
             ? `Customer saved. Portal ID: ${loginId} (share this with the customer).`
             : 'Customer saved successfully!';
@@ -39,8 +44,9 @@ export default function AddModal({
     );
 
     queryClient.invalidateQueries({ queryKey: ['customer'] });
+    onSuccess?.(res?.data);
     reset();
-    setSingleData(null);
+    setSingleData?.(null);
     setOpenModal(false);
   };
 
@@ -49,7 +55,7 @@ export default function AddModal({
       open={openModal}
       onOpenChange={setOpenModal}
       title={title ?? ''}
-      onClose={() => setSingleData(null)}
+      onClose={() => setSingleData?.(null)}
       className="lg:min-w-1/4 min-w-md"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
