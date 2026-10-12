@@ -1,8 +1,8 @@
 import axios from 'axios';
-export const API_URL = 'http://localhost:8000';
-// export const API_URL = 'http://localhost:8000';
+// export const API_URL = 'https://apialfalahapi.mohammadenterprise.com';
+export const API_URL = 'https://apialfalah.mohammadenterprise.com';
 // export const API_URL = 'https://sellerscomp-backend.vercel.app';
-export const PRODUCT_API = 'https://apialfalahapi.mohammadenterprise.com';
+export const PRODUCT_API = 'https://apialfalah.mohammadenterprise.com';
 
 const API = axios.create({
   baseURL: API_URL,

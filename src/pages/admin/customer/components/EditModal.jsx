@@ -7,8 +7,10 @@ import { toast } from 'react-hot-toast';
 import API from '@/config/config';
 import { useQueryClient } from '@tanstack/react-query';
 import { DialogContent } from '@/components/ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 export default function EditModal({ data }) {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -34,14 +36,14 @@ export default function EditModal({ data }) {
     await toast.promise(
       API.post('/api/customers', formData),
       {
-        loading: 'Saving...',
+        loading: t('toast.saving'),
         success: (res) => {
           const loginId = res?.data?.customer_login_id;
           return loginId
-            ? `Updated. Customer portal ID: ${loginId}`
-            : 'Customer updated successfully!';
+            ? t('customers.updatedWithId', { id: loginId })
+            : t('customers.updated');
         },
-        error: (error) => error.response?.data?.error || error.response?.data?.message || 'Something went wrong',
+        error: (error) => error.response?.data?.error || error.response?.data?.message || t('toast.somethingWrong'),
       }
     );
 
@@ -58,23 +60,23 @@ export default function EditModal({ data }) {
         {/* Customer Name */}
         <div className="mt-4">
           <InputField
-            label="Customer Name"
+            label={t('customers.name')}
             id="name"
             type="text"
-            placeholder="Enter customer name"
+            placeholder={t('customers.enterName')}
             register={register}
             error={errors.name}
-            validation={{ required: 'Customer Name is required' }}
+            validation={{ required: t('customers.nameRequired') }}
           />
         </div>
 
         {/* Phone */}
         <div className="mt-4">
           <InputField
-            label="Phone"
+            label={t('common.phone')}
             id="phone"
             type="number"
-            placeholder="Enter phone number"
+            placeholder={t('customers.enterPhone')}
             register={register}
             error={errors.phone}
           />
@@ -83,10 +85,10 @@ export default function EditModal({ data }) {
         {/* Address */}
         <div className="mt-4">
           <InputField
-            label="Address"
+            label={t('common.address')}
             id="address"
             type="text"
-            placeholder="Enter address"
+            placeholder={t('customers.enterAddress')}
             register={register}
             error={errors.address}
           />
@@ -94,19 +96,20 @@ export default function EditModal({ data }) {
 
         {data?.customer_login_id && (
           <p className="text-sm text-muted-foreground">
-            Customer portal ID: <span className="font-mono font-semibold text-foreground">{data.customer_login_id}</span>
+            {t('customers.portalIdLabel')}{' '}
+            <span className="font-mono font-semibold text-foreground">{data.customer_login_id}</span>
           </p>
         )}
 
         <div className="mt-4">
           <InputField
-            label="New portal password (optional)"
+            label={t('customers.newPassword')}
             id="password"
             type="password"
-            placeholder="Leave blank to keep current password"
+            placeholder={t('customers.leaveBlank')}
             register={register}
             validation={{
-              validate: (v) => !v || String(v).length >= 6 || 'At least 6 characters',
+              validate: (v) => !v || String(v).length >= 6 || t('validation.min6'),
             }}
             error={errors.password}
           />
@@ -118,7 +121,7 @@ export default function EditModal({ data }) {
           disabled={isSubmitting}
           className="btn btn-primary-light cursor-pointer font-semibold w-full"
         >
-          <Save className="mr-2" /> {isSubmitting ? 'Submitting...' : 'Save Changes'}
+          <Save className="mr-2" /> {isSubmitting ? t('common.submitting') : t('customers.saveChanges')}
         </Button>
       </form>
     </DialogContent>

@@ -6,15 +6,15 @@ import useStore from '@/store/Store';
 import PrintButton from '@/components/PrintButton';
 
 
-const columns = ({ constHandelDelete }) => [
+const columns = ({ t, constHandelDelete }) => [
   {
     id: 'customer',
-    header: () => <div className='text-left font-bold'>Customer</div>,
-    cell: ({ row }) => <div className='text-left font-medium'>{row.original.customer?.name || row.original.customer_name || 'N/A'}</div>,
+    header: () => <div className='text-left font-bold'>{t('common.customer')}</div>,
+    cell: ({ row }) => <div className='text-left font-medium'>{row.original.customer?.name || row.original.customer_name || t('common.na')}</div>,
   },
   {
     accessorKey: 'date',
-    header: () => <div className='text-center font-bold'>Date</div>,
+    header: () => <div className='text-center font-bold'>{t('common.date')}</div>,
     cell: ({ row }) => <div className='text-center'>{row.getValue('date')}</div>,
   },
   // {
@@ -33,7 +33,7 @@ const columns = ({ constHandelDelete }) => [
   // },
   {
     accessorKey: 'twelve_kg',
-    header: () => <div className='text-center font-bold'>12 KG</div>,
+    header: () => <div className='text-center font-bold'>{t('cylinders.12kg')}</div>,
     cell: ({ row }) => {
       const filled = row.original.twelve_kg || 0;
       const empty = row.original.empty_twelve_kg || 0;
@@ -75,7 +75,7 @@ const columns = ({ constHandelDelete }) => [
   // },
   {
     accessorKey: 'thirtyfive_kg',
-    header: () => <div className='text-center font-bold'>35 KG</div>,
+    header: () => <div className='text-center font-bold'>{t('cylinders.35kg')}</div>,
     cell: ({ row }) => {
       const filled = row.original.thirtyfive_kg || 0;
       const empty = row.original.empty_thirtyfive_kg || 0;
@@ -89,7 +89,7 @@ const columns = ({ constHandelDelete }) => [
   },
   {
     accessorKey: 'fourtyfive_kg',
-    header: () => <div className='text-center font-bold'>45 KG</div>,
+    header: () => <div className='text-center font-bold'>{t('cylinders.45kg')}</div>,
     cell: ({ row }) => {
       const filled = row.original.fourtyfive_kg || 0;
       const empty = row.original.empty_fourtyfive_kg || 0;
@@ -103,7 +103,7 @@ const columns = ({ constHandelDelete }) => [
   },
   {
     accessorKey: 'price',
-    header: () => <div className="text-center font-bold">Price</div>,
+    header: () => <div className="text-center font-bold">{t('common.price')}</div>,
     cell: ({ row }) => {
       const price = Number(row.getValue('price')) || 0;
       const otherCost = Number(row.original.other_cost_amount) || 0;
@@ -117,18 +117,18 @@ const columns = ({ constHandelDelete }) => [
   },
   {
     accessorKey: 'pay',
-    header: () => <div className='text-center font-bold'>Pay</div>,
+    header: () => <div className='text-center font-bold'>{t('common.pay')}</div>,
     cell: ({ row }) => <div className='text-center'>{row.getValue('pay')} </div>,
   },
   {
     accessorKey: 'due',
-    header: () => <div className='text-center font-bold'>Due</div>,
+    header: () => <div className='text-center font-bold'>{t('common.due')}</div>,
     cell: ({ row }) => <div className='text-center'>{row.getValue('due')} </div>,
   },
 
   {
     id: 'actions',
-    header: () => <div className='text-center font-bold'>Actions</div>,
+    header: () => <div className='text-center font-bold'>{t('common.actions')}</div>,
     cell: ({ row }) => {
       const { setSale } = useStore();
       const navigate = useNavigate();
@@ -142,13 +142,13 @@ const columns = ({ constHandelDelete }) => [
       return (
         <div className='flex justify-center' >
           <ToggleGroup variant='outline' type='single'>
-            <ToggleGroupItem className='cursor-pointer' value='delete' aria-label='Delete row' onClick={() => constHandelDelete(row.original.id)}>
+            <ToggleGroupItem className='cursor-pointer' value='delete' aria-label={t('sales.deleteAria')} onClick={() => constHandelDelete(row.original.id)}>
               <Trash width={20} height={20} />
             </ToggleGroupItem>
-            <ToggleGroupItem className='cursor-pointer' value='edit' aria-label='Edit row' onClick={() => handleEdit(row.original)}>
+            <ToggleGroupItem className='cursor-pointer' value='edit' aria-label={t('sales.editAria')} onClick={() => handleEdit(row.original)}>
               <Edit width={20} height={20} />
             </ToggleGroupItem>
-            <ToggleGroupItem className='cursor-pointer' value='print' aria-label='Print Invoice'>
+            <ToggleGroupItem className='cursor-pointer' value='print' aria-label={t('sales.printAria')}>
              
               <div >
                 <PrintButton

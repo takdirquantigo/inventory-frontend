@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import MyDocument from './Invoice';
 import { Printer } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 
 const PrintButton = ({ content }) => {
-    console.log(content)
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
   const handlePrint = async () => {
@@ -30,7 +31,7 @@ const PrintButton = ({ content }) => {
       disabled={loading}
       className='text-zinc-900'
     >
-      {loading ? 'Generating PDF...' :  <Printer width={20} height={20} />}
+      {loading ? t('table.generatingPdf') :  <Printer width={20} height={20} />}
     </button>
   );
 };

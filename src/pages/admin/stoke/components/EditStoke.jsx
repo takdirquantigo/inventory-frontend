@@ -14,8 +14,10 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useNavigate, useParams } from 'react-router-dom';
 import useStore from '@/store/Store';
+import { useTranslation } from 'react-i18next';
 
 export default function EditStoke() {
+  const { t } = useTranslation();
   const { product } = useStore();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -83,51 +85,51 @@ export default function EditStoke() {
     };
 
     await toast.promise(API.put(`/api/products/${id}`, payload), {
-      loading: 'Updating...',
+      loading: t('toast.updating'),
       success: (res) => {
-        toast.success(res.data?.message || 'Stock updated successfully!');
+        toast.success(res.data?.message || t('stock.updated'));
         queryClient.invalidateQueries({ queryKey: ['products'] });
         navigate('/admin/stoke');
       },
       error: (err) =>
-        toast.error(err.response?.data?.message || 'Something went wrong'),
+        toast.error(err.response?.data?.message || t('toast.somethingWrong')),
     });
   };
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Edit Stock</CardTitle>
-        <CardDescription>Update stock entry</CardDescription>
+        <CardTitle>{t('stock.editTitle')}</CardTitle>
+        <CardDescription>{t('stock.editDesc')}</CardDescription>
       </CardHeader>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          <InputField className="bg-white" id="five_kg" type="number" label="5 KG" register={register} error={errors.five_kg} />
-          <InputField className="bg-white" id="twelve_kg" type="number" label="12 KG" register={register} error={errors.twelve_kg} />
-          <InputField className="bg-white" id="twentyfive_kg" type="number" label="25 KG" register={register} error={errors.twentyfive_kg} />
-          <InputField className="bg-white" id="thirtythree_kg" type="number" label="33 KG" register={register} error={errors.thirtythree_kg} />
-          <InputField className="bg-white" id="thirtyfive_kg" type="number" label="35 KG" register={register} error={errors.thirtyfive_kg} />
-          <InputField className="bg-white" id="fourtyfive_kg" type="number" label="45 KG" register={register} error={errors.fourtyfive_kg} />
+          <InputField className="bg-white" id="five_kg" type="number" label={t('cylinders.5kg')} register={register} error={errors.five_kg} />
+          <InputField className="bg-white" id="twelve_kg" type="number" label={t('cylinders.12kg')} register={register} error={errors.twelve_kg} />
+          <InputField className="bg-white" id="twentyfive_kg" type="number" label={t('cylinders.25kg')} register={register} error={errors.twentyfive_kg} />
+          <InputField className="bg-white" id="thirtythree_kg" type="number" label={t('cylinders.33kg')} register={register} error={errors.thirtythree_kg} />
+          <InputField className="bg-white" id="thirtyfive_kg" type="number" label={t('cylinders.35kg')} register={register} error={errors.thirtyfive_kg} />
+          <InputField className="bg-white" id="fourtyfive_kg" type="number" label={t('cylinders.45kg')} register={register} error={errors.fourtyfive_kg} />
      
  
-          <InputField className="bg-white" id="empty_five_kg" type="number" label="Empty 5 KG" register={register} error={errors.empty_five_kg} />
-           <InputField className="bg-white" id="empty_twelve_kg" type="number" label="Empty 12 KG" register={register} error={errors.empty_twelve_kg} />
-          <InputField className="bg-white" id="empty_twentyfive_kg" type="number" label="Empty 25 KG" register={register} error={errors.empty_twentyfive_kg} />
-          <InputField className="bg-white" id="empty_thirtythree_kg" type="number" label="Empty 33 KG" register={register} error={errors.empty_thirtythree_kg} />
-          <InputField className="bg-white" id="empty_thirtyfive_kg" type="number" label="Empty 35 KG" register={register} error={errors.empty_thirtyfive_kg} />
-          <InputField className="bg-white" id="empty_fourtyfive_kg" type="number" label="Empty 45 KG" register={register} error={errors.empty_fourtyfive_kg} />
+          <InputField className="bg-white" id="empty_five_kg" type="number" label={t('cylinders.empty5kg')} register={register} error={errors.empty_five_kg} />
+           <InputField className="bg-white" id="empty_twelve_kg" type="number" label={t('cylinders.empty12kg')} register={register} error={errors.empty_twelve_kg} />
+          <InputField className="bg-white" id="empty_twentyfive_kg" type="number" label={t('cylinders.empty25kg')} register={register} error={errors.empty_twentyfive_kg} />
+          <InputField className="bg-white" id="empty_thirtythree_kg" type="number" label={t('cylinders.empty33kg')} register={register} error={errors.empty_thirtythree_kg} />
+          <InputField className="bg-white" id="empty_thirtyfive_kg" type="number" label={t('cylinders.empty35kg')} register={register} error={errors.empty_thirtyfive_kg} />
+          <InputField className="bg-white" id="empty_fourtyfive_kg" type="number" label={t('cylinders.empty45kg')} register={register} error={errors.empty_fourtyfive_kg} />
 
-          <InputField className="bg-white" id="price" type="number" label="Price" register={register} error={errors.price} />
+          <InputField className="bg-white" id="price" type="number" label={t('common.price')} register={register} error={errors.price} />
 
           {/* Date Picker */}
           <div className="flex flex-col gap-2">
-            <Label>Date</Label>
+            <Label>{t('common.date')}</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button type="button" variant="outline" className="justify-start text-left font-normal w-full">
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(new Date(date), 'dd-MM-yyyy') : 'Pick a date'}
+                  {date ? format(new Date(date), 'dd-MM-yyyy') : t('common.pickDate')}
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="start" className="p-0">
@@ -144,14 +146,14 @@ export default function EditStoke() {
 
           {/* Package Switch */}
           <div className="flex gap-2 items-center">
-            <Label>Is Package?</Label>
+            <Label>{t('common.isPackage')}</Label>
             <Switch checked={isPackage} onCheckedChange={setIsPackage} className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"/>
           </div>
         </CardContent>
 
         <CardFooter className="flex justify-end">
           <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
-            <Save className="w-4 h-4" /> Update
+            <Save className="w-4 h-4" /> {t('common.update')}
           </Button>
         </CardFooter>
       </form>

@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTranslation } from "react-i18next";
 
 export default function InputField({
     label,
@@ -14,6 +15,7 @@ export default function InputField({
     rows = 4,
     className = "",
 }) {
+    const { t } = useTranslation();
     let defaultValidation = {};
 
     if (!skipDefaultValidation) {
@@ -21,18 +23,18 @@ export default function InputField({
             defaultValidation = {
                 pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Please enter a valid email address",
+                    message: t("validation.email"),
                 },
             };
         } else if (type === "text") {
             defaultValidation = {
                 minLength: {
                     value: 3,
-                    message: "Must be at least 3 characters",
+                    message: t("validation.min3"),
                 },
                 maxLength: {
                     value: 100,
-                    message: "Must be at most 100 characters",
+                    message: t("validation.max100"),
                 }
             };
         }

@@ -5,36 +5,36 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '@/config/config';
 
-const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
+const columns = ({ t, setSingleData, constHandelDelete, setOpenModal }) => [
   {
     id: 'select',
-    header: () => <div className="text-center">Index</div>,
+    header: () => <div className="text-center">{t('common.index')}</div>,
     cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: 'name',
-    header: () => <div className="">Name</div>,
+    header: () => <div className="">{t('common.name')}</div>,
     cell: ({ row }) => <div className="">{row.getValue('name')}</div>,
   },
   {
     accessorKey: 'price',
-    header: () => <div className="">Price</div>,
-    cell: ({ row }) => <div>{row.getValue('price')} TK</div>,
+    header: () => <div className="">{t('common.price')}</div>,
+    cell: ({ row }) => <div>{row.getValue('price')} {t('common.tk')}</div>,
   },
   {
     accessorKey: 'type',
-    header: () => <div className="">Type</div>,
+    header: () => <div className="">{t('common.type')}</div>,
     cell: ({ row }) => {
       const v = row?.original?.is_cylinder;
       const isCylinder = v === 1 || v === true || v === '1';
-      return <div>{isCylinder ? 'Cylinder' : 'Accessories'}</div>;
+      return <div>{isCylinder ? t('items.cylinder') : t('items.accessories')}</div>;
     },
   },
   {
     accessorKey: 'image',
-    header: () => <div className="">Image</div>,
+    header: () => <div className="">{t('common.image')}</div>,
     cell: ({ row }) => {
       const src = row?.original?.image;
       return (
@@ -47,14 +47,14 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
 
   {
     id: 'actions',
-    header: () => <div>Actions</div>,
+    header: () => <div>{t('common.actions')}</div>,
     cell: ({ row }) => {
       return (
         <div>
           <ToggleGroup variant="outline" type="single">
             <ToggleGroupItem
               value="edit"
-              aria-label="Edit item"
+              aria-label={t('items.editAria')}
               onClick={() => {
                 setSingleData(row.original);
                 setOpenModal(true);
@@ -66,13 +66,13 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
             <ToggleGroupItem
               className="cursor-pointer"
               value="delete"
-              aria-label="Delete item"
+              aria-label={t('items.deleteAria')}
               onClick={() => constHandelDelete(row.original.id)}
             >
               <Trash width={20} height={20} />
             </ToggleGroupItem>
 
-            <ToggleGroupItem className="cursor-pointer" value="settings" aria-label="Item details">
+            <ToggleGroupItem className="cursor-pointer" value="settings" aria-label={t('items.detailsAria')}>
               <Link to={`/admin/customer/${row.original.id}`}>
                 <Settings2 width={20} height={20} />
               </Link>

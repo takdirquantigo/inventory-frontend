@@ -1,11 +1,37 @@
 import { Badge } from '@/components/ui/badge';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { BarChart3, Package, TableOfContents, Calendar, Settings, LogOut, ShoppingCart, ShieldBan, BaggageClaim, Boxes, Wallet } from 'lucide-react';
-import { NavLink, Outlet, Navigate, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/common/LanguageSwitcher';
+import { getNumberLocale } from '@/i18n';
+
+function getPageTitleKey(pathname) {
+  if (pathname.startsWith('/admin/customer/')) return 'pageTitle.customerDetails';
+  if (pathname === '/admin/sale/add') return 'pageTitle.addSale';
+  if (pathname.startsWith('/admin/sale/')) return 'pageTitle.editSale';
+  if (pathname === '/admin/stoke/add') return 'pageTitle.addStock';
+  if (pathname.startsWith('/admin/stoke/')) return 'pageTitle.editStock';
+
+  const map = {
+    '/admin/dashboard': 'nav.dashboard',
+    '/admin/analysis': 'nav.analytics',
+    '/admin/customers': 'nav.customers',
+    '/admin/due-customers': 'nav.dueCustomers',
+    '/admin/stoke': 'nav.stock',
+    '/admin/collection': 'nav.collection',
+    '/admin/sale': 'nav.sales',
+    '/admin/inactive': 'nav.inactive',
+    '/admin/items': 'nav.cms',
+  };
+  return map[pathname] || 'nav.overview';
+}
 
 export default function AdminLayout() {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const navigate = useNavigate();
+  const location = useLocation();
+  const { t, i18n } = useTranslation();
 
   if (!token) {
     return <Navigate to="/admin/login" replace />;
@@ -17,6 +43,8 @@ export default function AdminLayout() {
     navigate('/admin/login', { replace: true });
   };
 
+  const today = new Date().toLocaleDateString(getNumberLocale(i18n.language));
+
   return (
     <SidebarProvider>
       <div className='flex min-h-screen w-full  bg-background'>
@@ -27,13 +55,13 @@ export default function AdminLayout() {
               <div className='w-8 h-8 bg-primary rounded-full flex items-center justify-center'>
                 <span className='text-primary-foreground font-bold text-sm'>G</span>
               </div>
-              <span className='text-lg font-bold text-sidebar-foreground'>Al Falah Gas Service</span>
+              <span className='text-lg font-bold text-sidebar-foreground'>{t('app.name')}</span>
             </div>
           </SidebarHeader>
 
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+              <SidebarGroupLabel>{t('nav.dashboard')}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
@@ -41,7 +69,7 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <Package className='w-4 h-4' />
-                          <span>Dashboard</span>
+                          <span>{t('nav.dashboard')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -51,7 +79,7 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <BarChart3 className='w-4 h-4' />
-                          <span>Analytics</span>
+                          <span>{t('nav.analytics')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -61,16 +89,15 @@ export default function AdminLayout() {
             </SidebarGroup>
 
             <SidebarGroup>
-              <SidebarGroupLabel>Management</SidebarGroupLabel>
+              <SidebarGroupLabel>{t('nav.management')}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {/* Customers */}
                   <SidebarMenuItem>
                     <NavLink to='/admin/customers'>
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <ShoppingCart className='w-4 h-4' />
-                          <span>Customers</span>
+                          <span>{t('nav.customers')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -80,19 +107,18 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <Wallet className='w-4 h-4' />
-                          <span>Due customers</span>
+                          <span>{t('nav.dueCustomers')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
                   </SidebarMenuItem>
 
-                  {/* Stoke */}
                   <SidebarMenuItem>
                     <NavLink to='/admin/stoke'>
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <Package className='w-4 h-4' />
-                          <span>Stoke</span>
+                          <span>{t('nav.stock')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -102,7 +128,7 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <Boxes className='w-4 h-4' />
-                          <span>Collection</span>
+                          <span>{t('nav.collection')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -112,7 +138,7 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <BaggageClaim className='w-4 h-4' />
-                          <span>Sales</span>
+                          <span>{t('nav.sales')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -122,7 +148,7 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <ShieldBan className='w-4 h-4' />
-                          <span>Inactive</span>
+                          <span>{t('nav.inactive')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -132,7 +158,7 @@ export default function AdminLayout() {
                       {({ isActive }) => (
                         <SidebarMenuButton isActive={isActive}>
                           <TableOfContents className='w-4 h-4' />
-                          <span>CMS</span>
+                          <span>{t('nav.cms')}</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>
@@ -142,13 +168,13 @@ export default function AdminLayout() {
             </SidebarGroup>
 
             <SidebarGroup>
-              <SidebarGroupLabel>Settings</SidebarGroupLabel>
+              <SidebarGroupLabel>{t('nav.settings')}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton>
                       <Settings className='w-4 h-4' />
-                      <span>Configuration</span>
+                      <span>{t('nav.configuration')}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenu>
@@ -159,9 +185,14 @@ export default function AdminLayout() {
           <SidebarFooter className='border-t border-sidebar-border'>
             <SidebarMenu>
               <SidebarMenuItem>
+                <div className='px-2 pb-2'>
+                  <LanguageSwitcher className='w-full justify-stretch [&>button]:flex-1' />
+                </div>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton onClick={logout} className='cursor-pointer'>
                   <LogOut className='w-4 h-4' />
-                  <span>Logout</span>
+                  <span>{t('nav.logout')}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -173,12 +204,13 @@ export default function AdminLayout() {
           <header className='flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
             <SidebarTrigger className='-ml-1' />
             <div className='flex items-center gap-2'>
-              <h1 className='text-lg font-semibold'>Dashboard Overview</h1>
+              <h1 className='text-lg font-semibold'>{t(getPageTitleKey(location.pathname))}</h1>
             </div>
             <div className='ml-auto flex items-center gap-2'>
+              <LanguageSwitcher className='hidden sm:inline-flex' />
               <Badge variant='outline' className='bg-primary/10 text-primary border-primary/20'>
                 <Calendar className='w-3 h-3 mr-1' />
-                Today: {new Date().toLocaleDateString()}
+                {t('dashboard.todayBadge', { date: today })}
               </Badge>
             </div>
           </header>

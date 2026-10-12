@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ArrowUpDown, SquarePen, Settings2, ShoppingCart, Phone, MapPin } from 'lucide-react';
+import { ArrowUpDown, SquarePen, Settings2, ShoppingCart, Phone, MapPin, Trash2 } from 'lucide-react';
 import EditModal from './EditModal';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Link } from 'react-router-dom';
@@ -26,10 +26,10 @@ function SortHeader({ column, label }) {
   );
 }
 
-const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
+const columns = ({ t, setSingleData, constHandelDelete, setOpenModal }) => [
   {
     accessorKey: 'name',
-    header: () => <span className='pl-1'>Customer</span>,
+    header: () => <span className='pl-1'>{t('common.customer')}</span>,
     cell: ({ row }) => {
       const name = row.getValue('name') ?? '—';
       const phone = row.original?.phone ?? '';
@@ -47,11 +47,11 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
             <p className='truncate font-semibold leading-tight text-foreground'>{name}</p>
             <div className='flex items-start gap-1.5 text-xs text-muted-foreground'>
               <Phone className='mt-0.5 h-3.5 w-3.5 shrink-0 opacity-70' aria-hidden />
-              <span className='wrap-break-word'>{phone || 'No phone'}</span>
+              <span className='wrap-break-word'>{phone || t('customers.noPhone')}</span>
             </div>
             <div className='flex items-start gap-1.5 text-xs text-muted-foreground'>
               <MapPin className='mt-0.5 h-3.5 w-3.5 shrink-0 opacity-70' aria-hidden />
-              <span className='line-clamp-2 wrap-break-word'>{address || 'No address'}</span>
+              <span className='line-clamp-2 wrap-break-word'>{address || t('customers.noAddress')}</span>
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
   },
   {
     accessorKey: 'customer_login_id',
-    header: () => <span className='text-center'>Login ID</span>,
+    header: () => <span className='text-center'>{t('customers.loginId')}</span>,
     cell: ({ row }) => {
       const id = row.original?.customer_login_id;
       return (
@@ -77,13 +77,13 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
     accessorKey: 'total_purchase',
     header: ({ column }) => (
       <div className='text-right'>
-        <SortHeader column={column} label='Total buy' />
+        <SortHeader column={column} label={t('customers.totalBuy')} />
       </div>
     ),
     cell: ({ row }) => (
       <div className='text-right tabular-nums'>
         <span className='font-medium text-foreground'>{formatTk(row.getValue('total_purchase'))}</span>
-        <span className='ml-1 text-xs font-normal text-muted-foreground'>TK</span>
+        <span className='ml-1 text-xs font-normal text-muted-foreground'>{t('common.tk')}</span>
       </div>
     ),
   },
@@ -91,13 +91,13 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
     accessorKey: 'total_paid',
     header: ({ column }) => (
       <div className='text-right'>
-        <SortHeader column={column} label='Total pay' />
+        <SortHeader column={column} label={t('customers.totalPay')} />
       </div>
     ),
     cell: ({ row }) => (
       <div className='text-right tabular-nums'>
         <span className='font-medium text-emerald-600 dark:text-emerald-400'>{formatTk(row.getValue('total_paid'))}</span>
-        <span className='ml-1 text-xs font-normal text-muted-foreground'>TK</span>
+        <span className='ml-1 text-xs font-normal text-muted-foreground'>{t('common.tk')}</span>
       </div>
     ),
   },
@@ -105,7 +105,7 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
     accessorKey: 'total_due',
     header: ({ column }) => (
       <div className='text-right'>
-        <SortHeader column={column} label='Total due' />
+        <SortHeader column={column} label={t('customers.totalDue')} />
       </div>
     ),
     cell: ({ row }) => {
@@ -124,7 +124,7 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
                 : 'bg-muted/50 text-muted-foreground ring-border/50',
             )}>
             {formatTk(totalDue)}
-            <span className='ml-1 text-xs font-normal opacity-80'>TK</span>
+            <span className='ml-1 text-xs font-normal opacity-80'>{t('common.tk')}</span>
           </span>
         </div>
       );
@@ -133,12 +133,12 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
 
   {
     id: 'actions',
-    header: () => <span className='pr-1 text-center'>Actions</span>,
+    header: () => <span className='pr-1 text-center'>{t('common.actions')}</span>,
     cell: ({ row }) => (
       <div className='flex items-center justify-end gap-1'>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant='ghost' size='icon' className='h-9 w-9 text-muted-foreground hover:text-foreground' aria-label='Edit customer'>
+            <Button variant='ghost' size='icon' className='h-9 w-9 text-muted-foreground hover:text-foreground' aria-label={t('customers.editAria')}>
               <SquarePen className='h-4 w-4' />
             </Button>
           </DialogTrigger>
@@ -146,15 +146,25 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
         </Dialog>
 
         <Button variant='ghost' size='icon' className='h-9 w-9 text-muted-foreground hover:text-foreground' asChild>
-          <Link to={`/admin/sale/add?customer_id=${row.original.id}`} aria-label='New sale for this customer'>
+          <Link to={`/admin/sale/add?customer_id=${row.original.id}`} aria-label={t('customers.saleAria')}>
             <ShoppingCart className='h-4 w-4' />
           </Link>
         </Button>
 
         <Button variant='ghost' size='icon' className='h-9 w-9 text-muted-foreground hover:text-foreground' asChild>
-          <Link to={`/admin/customer/${row.original.id}`} aria-label='Customer details'>
+          <Link to={`/admin/customer/${row.original.id}`} aria-label={t('customers.detailsAria')}>
             <Settings2 className='h-4 w-4' />
           </Link>
+        </Button>
+
+        <Button
+          variant='ghost'
+          size='icon'
+          className='h-9 w-9 text-muted-foreground hover:text-destructive'
+          aria-label={t('customers.deleteAria')}
+          onClick={() => constHandelDelete(row.original.id)}
+        >
+          <Trash2 className='h-4 w-4' />
         </Button>
       </div>
     ),

@@ -9,8 +9,10 @@ import API from '@/config/config';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function Stoke() {
+  const { t } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [singleData, setSingleData] = useState(null);
   const [page, setPage] = useState(1);
@@ -37,20 +39,21 @@ export default function Stoke() {
 
   const constHandelDelete = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'This action cannot be undone!',
+      title: t('confirm.title'),
+      text: t('confirm.text'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: t('confirm.yesDelete'),
+      cancelButtonText: t('common.cancel'),
     }).then((result) => {
       if (result.isConfirmed) {
         toast.promise(
           API.delete(`/api/products/${id}`),
           {
-            loading: 'Deleting...',
-            success: (data) => data.message || 'Deleted successfully!',
+            loading: t('confirm.deleting'),
+            success: (data) => data.message || t('confirm.deleted'),
             error: (error) => error.response.data.message,
           }
         );
@@ -63,13 +66,13 @@ export default function Stoke() {
       <div className="w-full">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-semibold">Stoke Management</h2>
+            <h2 className="text-2xl font-semibold">{t('stock.title')}</h2>
             <p className="text-sm text-muted-foreground">
-              Manage your Stoke
+              {t('stock.subtitle')}
             </p>
           </div>
           <Link to="/admin/stoke/add">
-            <Button className="cursor-pointer">Add Stoke</Button>
+            <Button className="cursor-pointer">{t('stock.add')}</Button>
           </Link>
         </div>
 
@@ -79,6 +82,7 @@ export default function Stoke() {
           <div className="overflow-hidden rounded-md ">
             <DataTable
               columns={columns({
+                t,
                 setSingleData,
                 constHandelDelete,
                 setOpenModal,
@@ -101,7 +105,7 @@ export default function Stoke() {
         <AddModal
           openModal={openModal}
           setOpenModal={setOpenModal}
-          title={singleData?.id ? 'Edit Customer' : 'Add Customer'}
+          title={singleData?.id ? t('customers.editTitle') : t('customers.addTitle')}
           singleData={singleData}
           setSingleData={setSingleData}
         />

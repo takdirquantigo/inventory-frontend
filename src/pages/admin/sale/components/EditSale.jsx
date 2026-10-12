@@ -16,10 +16,12 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import useStore from '@/store/Store';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 
 export default function EditSale() {
+  const { t } = useTranslation();
   const { sale: data } = useStore();
   const {
     register,
@@ -39,11 +41,11 @@ export default function EditSale() {
 
   const fields = [
     // {label: '5 Kg', qty: 'five_kg', price: 'price_5_kg' },
-    {label: '12 Kg', qty: 'twelve_kg', price: 'price_12_kg' },
+    {label: t('cylinders.12kg'), qty: 'twelve_kg', price: 'price_12_kg' },
     // {label: '25 Kg', qty: 'twentyfive_kg', price: 'price_25_kg' },
     // {label: '33 Kg', qty: 'thirtythree_kg', price: 'price_33_kg' },
-    {label: '35 Kg', qty: 'thirtyfive_kg', price: 'price_35_kg' },
-    {label: '45 Kg', qty: 'fourtyfive_kg', price: 'price_45_kg' },
+    {label: t('cylinders.35kg'), qty: 'thirtyfive_kg', price: 'price_35_kg' },
+    {label: t('cylinders.45kg'), qty: 'fourtyfive_kg', price: 'price_45_kg' },
   ];
 
   const watchedValues = watch(fields.flatMap((f) => [f.qty, f.price]));
@@ -110,16 +112,16 @@ export default function EditSale() {
 
       await toast.promise(API.post('/api/sales/update', payload), {
         // or PUT if backend uses PUT
-        loading: 'Updating...',
+        loading: t('toast.updating'),
         success: () => {
-          toast.success('Sale updated successfully!');
+          toast.success(t('sales.updated'));
           queryClient.invalidateQueries({ queryKey: ['products'] });
 
           reset();
           navigate('/admin/sale');
         },
         error: (err) => {
-          toast.error(err.response?.data?.message || 'Something went wrong');
+          toast.error(err.response?.data?.message || t('toast.somethingWrong'));
         },
       });
     } catch (err) {
@@ -133,11 +135,11 @@ export default function EditSale() {
     <div>
       <div className='flex items-center justify-between'>
         <div>
-          <h2 className='text-2xl font-semibold'>Edit Sale</h2>
-          <p className='text-sm text-muted-foreground'>Edit your Sale</p>
+          <h2 className='text-2xl font-semibold'>{t('sales.editTitle')}</h2>
+          <p className='text-sm text-muted-foreground'>{t('sales.editDesc')}</p>
         </div>
         <Button onClick={() => navigate('/admin/sale')}>
-          <ArrowLeft className='mr-2 h-4 w-4' /> Back
+          <ArrowLeft className='mr-2 h-4 w-4' /> {t('common.back')}
         </Button>
       </div>
       <Card className="mt-4" >
@@ -147,24 +149,24 @@ export default function EditSale() {
               {fields.map((f, idx) => (
                 <React.Fragment key={idx}>
                   <InputField id={f.qty} type='number' className='bg-white' label={f.label} register={register} error={errors[f.qty]} />
-                  <InputField id={`empty_${f.qty}`} type='number' className='bg-white' label={`Empty ${f.label}`} register={register} error={errors[`empty_${f.qty}`]} />
-                  <InputField id={f.price} type='number' className='bg-white' label={`Unit Price ${f.label}`} register={register} error={errors[f.price]} />
+                  <InputField id={`empty_${f.qty}`} type='number' className='bg-white' label={t('sales.emptySize', { size: f.label })} register={register} error={errors[`empty_${f.qty}`]} />
+                  <InputField id={f.price} type='number' className='bg-white' label={t('sales.unitPrice', { size: f.label })} register={register} error={errors[f.price]} />
                 </React.Fragment>
               ))}
 
-              <InputField id='price' type='number' className='bg-gray-100' label='Total Price' register={register} error={errors.price} readOnly />
-              <InputField id='pay' type='number' className='bg-white' label='Pay' register={register} error={errors.pay} />
-              <InputField id='due' type='number' className='bg-gray-100' label='Due' register={register} error={errors.due} readOnly />
+              <InputField id='price' type='number' className='bg-gray-100' label={t('sales.totalPrice')} register={register} error={errors.price} readOnly />
+              <InputField id='pay' type='number' className='bg-white' label={t('common.pay')} register={register} error={errors.pay} />
+              <InputField id='due' type='number' className='bg-gray-100' label={t('common.due')} register={register} error={errors.due} readOnly />
             </CardContent>
 
             <div className='mx-6 mt-6 flex flex-wrap items-center gap-x-8 gap-y-4'>
               <div className='flex flex-col gap-2 min-w-[200px]'>
-                <label className='text-sm font-medium'>Date</label>
+                <label className='text-sm font-medium'>{t('common.date')}</label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button type='button' variant='outline' className='justify-start text-left font-normal w-full'>
                       <CalendarIcon className='mr-2 h-4 w-4' />
-                      {date ? format(new Date(date), 'dd-MM-yyyy') : 'Pick a date'}
+                      {date ? format(new Date(date), 'dd-MM-yyyy') : t('common.pickDate')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent align='start' className='p-0'>
@@ -175,24 +177,24 @@ export default function EditSale() {
               </div>
 
               <div className='flex gap-2 items-center'>
-                <Label htmlFor='edit-sale-is-package'>Is Package?</Label>
+                <Label htmlFor='edit-sale-is-package'>{t('common.isPackage')}</Label>
                 <Switch id='edit-sale-is-package' checked={isPackage} onCheckedChange={setIsPackage} />
               </div>
 
               <div className='flex gap-2 items-center'>
-                <Label htmlFor='edit-sale-whole-sale'>Whole sale?</Label>
+                <Label htmlFor='edit-sale-whole-sale'>{t('common.wholeSale')}</Label>
                 <Switch id='edit-sale-whole-sale' checked={isWholeSale} onCheckedChange={setIsWholeSale} />
               </div>
             </div>
 
             <div className='mt-4 mx-6'>
-              <Label className='mb-2'>Customer</Label>
-              <Select closeMenuOnSelect={true} components={animatedComponents} isMulti={false} options={customer} value={selectedCustomer} onChange={(val) => setSelectedCustomer(val)} />
+              <Label className='mb-2'>{t('common.customer')}</Label>
+              <Select closeMenuOnSelect={true} components={animatedComponents} isMulti={false} options={customer} value={selectedCustomer} onChange={(val) => setSelectedCustomer(val)} placeholder={t('common.selectCustomer')} />
             </div>
 
             <CardFooter className='flex justify-end mt-4'>
               <Button type='submit' disabled={isSubmitting} className='flex items-center gap-2'>
-                <Save className='w-4 h-4' /> Update
+                <Save className='w-4 h-4' /> {t('common.update')}
               </Button>
             </CardFooter>
           </form>

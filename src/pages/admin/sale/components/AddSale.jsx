@@ -16,6 +16,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import AddModal from '@/pages/admin/customer/components/AddModal';
+import { useTranslation } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 
@@ -39,6 +40,7 @@ const parseYmdToDate = (ymd) => {
 };
 
 export default function AddSale() {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -158,24 +160,27 @@ export default function AddSale() {
         is_package: isPackage,
         whole_sale: isWholeSale ? 1 : 0,
         customer: selectedCustomer,
+        five_kg: data.five_kg || 0,
+        twentyfive_kg: data.twentyfive_kg || 0,
+        thirtythree_kg: data.thirtythree_kg || 0,
       };
       if (!payload.date) {
-        toast.error('Date is required');
+        toast.error(t('sales.dateRequired'));
         return;
       }
       if (!payload.customer) {
-        toast.error('Customer is required');
+        toast.error(t('sales.customerRequired'));
         return;
       }
       if (!payload.price) {
-        toast.error('Total Price is required');
+        toast.error(t('sales.totalPriceRequired'));
         return;
       }
 
       await toast.promise(API.post('/api/sales', payload), {
-        loading: 'Saving...',
+        loading: t('toast.saving'),
         success: () => {
-          toast.success('Sale saved successfully!');
+          toast.success(t('sales.saved'));
           queryClient.invalidateQueries({ queryKey: ['sales'] });
           reset();
           setSelectedCustomer(null);
@@ -183,7 +188,7 @@ export default function AddSale() {
           // navigate('/admin/stoke');
         },
         error: (err) => {
-          toast.error(err.response?.data?.message || 'Something went wrong');
+          toast.error(err.response?.data?.message || t('toast.somethingWrong'));
         },
       });
     } catch (err) {
@@ -198,11 +203,11 @@ export default function AddSale() {
     <div>
       <div className='flex items-center justify-between'>
         <div>
-          <h2 className='text-2xl font-semibold'>Add Sale</h2>
-          <p className='text-sm text-muted-foreground'>Add new Sale</p>
+          <h2 className='text-2xl font-semibold'>{t('sales.addTitle')}</h2>
+          <p className='text-sm text-muted-foreground'>{t('sales.addDesc')}</p>
         </div>
         <Button onClick={() => navigate('/admin/sale')}>
-          <ArrowLeft className='mr-2 h-4 w-4' /> Back
+          <ArrowLeft className='mr-2 h-4 w-4' /> {t('common.back')}
         </Button>
       </div>
       <Card className="mt-4" >
@@ -215,9 +220,9 @@ export default function AddSale() {
               <InputField id='price_5_kg' type='number' className='bg-white' label='Unit Price 5 KG' register={register} error={errors.price_5_kg} /> */}
 
               {/* 12 KG */}
-              <InputField id='twelve_kg' type='number' className='bg-white' label='12 KG' register={register} error={errors.twelve_kg} />
-              <InputField id='empty_twelve_kg' type='number' className='bg-white' label='Empty 12 KG' register={register} error={errors.empty_twelve_kg} />
-              <InputField id='price_12_kg' type='number' className='bg-white' label='Unit Price 12 KG' register={register} error={errors.price_12_kg} />
+              <InputField id='twelve_kg' type='number' className='bg-white' label={t('cylinders.12kg')} register={register} error={errors.twelve_kg} />
+              <InputField id='empty_twelve_kg' type='number' className='bg-white' label={t('cylinders.empty12kg')} register={register} error={errors.empty_twelve_kg} />
+              <InputField id='price_12_kg' type='number' className='bg-white' label={t('sales.unitPrice', { size: t('cylinders.12kg') })} register={register} error={errors.price_12_kg} />
 
               {/* 25 KG */}
               {/* <InputField id='twentyfive_kg' type='number' className='bg-white' label='25 KG' register={register} error={errors.twentyfive_kg} />
@@ -230,39 +235,39 @@ export default function AddSale() {
               <InputField id='price_33_kg' type='number' className='bg-white' label='Unit Price 33 KG' register={register} error={errors.price_33_kg} /> */}
 
               {/* 35 KG */}
-              <InputField id='thirtyfive_kg' type='number' className='bg-white' label='35 KG' register={register} error={errors.thirtyfive_kg} />
-              <InputField id='empty_thirtyfive_kg' type='number' className='bg-white' label='Empty 35 KG' register={register} error={errors.empty_thirtyfive_kg} />
-              <InputField id='price_35_kg' type='number' className='bg-white' label='Unit Price 35 KG' register={register} error={errors.price_35_kg} />
+              <InputField id='thirtyfive_kg' type='number' className='bg-white' label={t('cylinders.35kg')} register={register} error={errors.thirtyfive_kg} />
+              <InputField id='empty_thirtyfive_kg' type='number' className='bg-white' label={t('cylinders.empty35kg')} register={register} error={errors.empty_thirtyfive_kg} />
+              <InputField id='price_35_kg' type='number' className='bg-white' label={t('sales.unitPrice', { size: t('cylinders.35kg') })} register={register} error={errors.price_35_kg} />
 
               {/* 45 KG */}
-              <InputField id='fourtyfive_kg' type='number' className='bg-white' label='45 KG' register={register} error={errors.fourtyfive_kg} />
-              <InputField id='empty_fourtyfive_kg' type='number' className='bg-white' label='Empty 45 KG' register={register} error={errors.empty_fourtyfive_kg} />
-              <InputField id='price_45_kg' type='number' className='bg-white' label='Unit Price 45 KG' register={register} error={errors.price_45_kg} />
+              <InputField id='fourtyfive_kg' type='number' className='bg-white' label={t('cylinders.45kg')} register={register} error={errors.fourtyfive_kg} />
+              <InputField id='empty_fourtyfive_kg' type='number' className='bg-white' label={t('cylinders.empty45kg')} register={register} error={errors.empty_fourtyfive_kg} />
+              <InputField id='price_45_kg' type='number' className='bg-white' label={t('sales.unitPrice', { size: t('cylinders.45kg') })} register={register} error={errors.price_45_kg} />
 
               {/* Total Price (ReadOnly) */}
-              <InputField id='price' type='number' className='bg-gray-100' label='Total Price' register={register} error={errors.price} readOnly />
+              <InputField id='price' type='number' className='bg-gray-100' label={t('sales.totalPrice')} register={register} error={errors.price} readOnly />
 
               {/* Pay */}
-              <InputField id='pay' type='number' className='bg-white' label='Pay' register={register} error={errors.pay} />
+              <InputField id='pay' type='number' className='bg-white' label={t('common.pay')} register={register} error={errors.pay} />
 
               {/* Due (ReadOnly) */}
-              <InputField id='due' type='number' className='bg-gray-100' label='Due' register={register} error={errors.due} readOnly />
+              <InputField id='due' type='number' className='bg-gray-100' label={t('common.due')} register={register} error={errors.due} readOnly />
 
               {/* Other Cost */}
-              <InputField id='other_cost_name' type='text' className='bg-white' label='Other Cost Name' register={register} error={errors.other_cost_name} />
-              <InputField id='other_cost_amount' type='text' className='bg-white' label='Other Cost Amount' register={register} error={errors.other_cost_amount} />
-              <InputField id='total' type='number' className='bg-gray-100' label='Total' register={register} error={errors.total} readOnly />
+              <InputField id='other_cost_name' type='text' className='bg-white' label={t('sales.otherCostName')} register={register} error={errors.other_cost_name} />
+              <InputField id='other_cost_amount' type='text' className='bg-white' label={t('sales.otherCostAmount')} register={register} error={errors.other_cost_amount} />
+              <InputField id='total' type='number' className='bg-gray-100' label={t('common.total')} register={register} error={errors.total} readOnly />
             </CardContent>
 
             {/* Date & Package */}
             <div className='mx-6 flex flex-wrap items-center gap-x-8 gap-y-4'>
               <div className='flex flex-col gap-2 min-w-[200px]'>
-                <label className='text-sm font-medium'>Date</label>
+                <label className='text-sm font-medium'>{t('common.date')}</label>
                 <Popover open={isDatePopoverOpen} onOpenChange={setIsDatePopoverOpen}>
                   <PopoverTrigger asChild>
                     <Button type='button' variant='outline' className='justify-start text-left font-normal w-full'>
                       <CalendarIcon className='mr-2 h-4 w-4' />
-                      {selectedDate ? format(selectedDate, 'dd-MM-yyyy') : 'Pick a date'}
+                      {selectedDate ? format(selectedDate, 'dd-MM-yyyy') : t('common.pickDate')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent align='start' className='p-0'>
@@ -282,25 +287,26 @@ export default function AddSale() {
               </div>
 
               <div className='flex gap-2 items-center'>
-                <Label htmlFor='sale-is-package'>Is Package?</Label>
+                <Label htmlFor='sale-is-package'>{t('common.isPackage')}</Label>
                 <Switch id='sale-is-package' checked={isPackage} onCheckedChange={setIsPackage} />
               </div>
 
               <div className='flex gap-2 items-center'>
-                <Label htmlFor='sale-whole-sale'>Whole sale?</Label>
+                <Label htmlFor='sale-whole-sale'>{t('common.wholeSale')}</Label>
                 <Switch id='sale-whole-sale' checked={isWholeSale} onCheckedChange={setIsWholeSale} />
               </div>
             </div>
 
             {/* Customer Select */}
             <div className='mt-4 mx-6'>
-              <Label className='mb-2'>Customer</Label>
+              <Label className='mb-2'>{t('common.customer')}</Label>
               <Select
                 closeMenuOnSelect={true}
                 components={animatedComponents}
                 options={customer}
                 value={selectedCustomer}
                 onChange={(val) => setSelectedCustomer(val)}
+                placeholder={t('common.selectCustomer')}
               />
             </div>
 
@@ -311,10 +317,10 @@ export default function AddSale() {
                 onClick={() => setOpenCustomerModal(true)}
                 className='flex items-center gap-2'
               >
-                <UserPlus className='w-4 h-4' /> Add New Customer
+                <UserPlus className='w-4 h-4' /> {t('common.addNewCustomer')}
               </Button>
               <Button type='submit' disabled={isSubmitting} className='flex items-center gap-2'>
-                <Save className='w-4 h-4' /> Save
+                <Save className='w-4 h-4' /> {t('common.save')}
               </Button>
             </CardFooter>
           </form>
@@ -325,7 +331,7 @@ export default function AddSale() {
         <AddModal
           openModal={openCustomerModal}
           setOpenModal={setOpenCustomerModal}
-          title='Add Customer'
+          title={t('customers.addTitle')}
           onSuccess={handleCustomerCreated}
         />
       )}

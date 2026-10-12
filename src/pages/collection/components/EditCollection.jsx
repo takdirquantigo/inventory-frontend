@@ -15,10 +15,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { DialogContent } from '@/components/ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 
 export default function EditCollection({ data }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const {
@@ -63,7 +65,7 @@ export default function EditCollection({ data }) {
         }));
         setCustomer(responseData);
       } catch (err) {
-        toast.error('Failed to fetch customers');
+        toast.error(t('collection.fetchCustomersFailed'));
       }
     };
     fetchCustomers();
@@ -77,7 +79,7 @@ export default function EditCollection({ data }) {
         const response = await API.get(`api/sales/details/${selectedCustomer?.value}`);
         setDetails(response.data);
       } catch (err) {
-        toast.error('Failed to fetch customer details');
+        toast.error(t('collection.fetchDetailsFailed'));
       }
     };
     fetchDetails();
@@ -85,11 +87,11 @@ export default function EditCollection({ data }) {
 
   const onSubmit = async (formData) => {
     if (!formData.pay) {
-      toast.error('Pay is required');
+      toast.error(t('collection.payRequired'));
       return;
     }
     if (!selectedCustomer) {
-      toast.error('Customer is required');
+      toast.error(t('sales.customerRequired'));
       return;
     }
 
@@ -102,9 +104,9 @@ export default function EditCollection({ data }) {
     };
 
     await toast.promise(API.post(`/api/sales/collection`, payload), {
-      loading: 'Updating...',
-      success: 'Collection updated successfully!',
-      error: (error) => error.response?.data?.message || 'Something went wrong',
+      loading: t('toast.updating'),
+      success: t('collection.updated'),
+      error: (error) => error.response?.data?.message || t('toast.somethingWrong'),
     });
 
     queryClient.invalidateQueries({ queryKey: ['collection'] });
@@ -116,21 +118,21 @@ export default function EditCollection({ data }) {
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
         {/* Customer Select */}
         <div className='mt-4'>
-          <Select closeMenuOnSelect={true} components={animatedComponents} options={customer} onChange={(val) => setSelectedCustomer(val)} value={selectedCustomer} />
+          <Select closeMenuOnSelect={true} components={animatedComponents} options={customer} onChange={(val) => setSelectedCustomer(val)} value={selectedCustomer} placeholder={t('common.selectCustomer')} />
         </div>
 
         {/* Pay Input */}
         <div className='mt-4'>
-          <InputField id='pay' type='number' className='bg-white' label='Pay' register={register} error={errors.pay} />
+          <InputField id='pay' type='number' className='bg-white' label={t('common.pay')} register={register} error={errors.pay} />
         </div>
         {/* Date Picker */}
         <div className='mt-4 w-full'>
-          <label className='text-sm font-medium'>Date</label>
+          <label className='text-sm font-medium'>{t('common.date')}</label>
           <Popover>
             <PopoverTrigger asChild>
               <Button type='button' variant='outline' className='justify-start text-left font-normal w-full'>
                 <CalendarIcon className='mr-2 h-4 w-4' />
-                {date ? format(new Date(date), 'dd-MM-yyyy') : 'Pick a date'}
+                {date ? format(new Date(date), 'dd-MM-yyyy') : t('common.pickDate')}
               </Button>
             </PopoverTrigger>
             <PopoverContent align='start' className='p-0'>
@@ -143,9 +145,9 @@ export default function EditCollection({ data }) {
         {/* Customer details */}
         {details && (
           <div className='mt-4'>
-            <p>Total Buy: {details?.totalBuy} TK</p>
-            <p>Total Pay: {details?.totalPay} TK</p>
-            <p>Total Due: {details?.totalDue} TK</p>
+            <p>{t('collection.totalBuy', { amount: details?.totalBuy })}</p>
+            <p>{t('collection.totalPay', { amount: details?.totalPay })}</p>
+            <p>{t('collection.totalDue', { amount: details?.totalDue })}</p>
           </div>
         )}
 
@@ -154,7 +156,7 @@ export default function EditCollection({ data }) {
         {/* Submit Button */}
         <Button type='submit' disabled={isSubmitting} className='btn btn-primary-light cursor-pointer font-semibold w-full'>
           <Save className='mr-2' />
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+          {isSubmitting ? t('common.submitting') : t('common.submit')}
         </Button>
       </form>
     </DialogContent>

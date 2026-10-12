@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 export default function ColumnVisibilityDropdown({ table }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
     <div className="relative inline-block text-left mb-4">
       {/* Dropdown button */}
       <Button onClick={() => setOpen(!open)}>
-        Columns <span className="ml-1">▼</span>
+        {t('common.columns')} <span className="ml-1">▼</span>
       </Button>
 
       {/* Dropdown menu */}

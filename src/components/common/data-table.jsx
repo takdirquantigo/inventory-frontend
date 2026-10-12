@@ -4,11 +4,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination';
 import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 import TableLoading from './TableLoading';
-import { Checkbox } from '@/components/ui/checkbox';
 import ColumnVisibilityDropdown from './columnVisibal';
 import { Input } from '../ui/input';
+import { useTranslation } from 'react-i18next';
 
 export function DataTable({ columns, data, links, setPage, page, isLoading, isError, error, searchTerm, setSearchTerm, isShowSearch = true }) {
+  const { t } = useTranslation();
   const [columnVisibility, setColumnVisibility] = useState({});
 
   const table = useReactTable({
@@ -37,7 +38,7 @@ export function DataTable({ columns, data, links, setPage, page, isLoading, isEr
     <div>
       {isShowSearch && <div className='flex flex-col md:flex-row items-start md:items-center justify-between py-4 gap-2 w-full'>
         <div className='w-full md:w-auto flex-1'>
-          <Input className='w-full md:max-w-sm' placeholder='Search ...' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          <Input className='w-full md:max-w-sm' placeholder={t('common.search')} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
 
         <div className='w-full md:w-auto flex justify-start md:justify-end'>
@@ -52,7 +53,7 @@ export function DataTable({ columns, data, links, setPage, page, isLoading, isEr
             <TableLoading columns={10} />
           </div>
         ) : isError ? (
-          <div className='p-10 text-center text-sm text-destructive'>{error?.message ?? 'Error loading data.'}</div>
+          <div className='p-10 text-center text-sm text-destructive'>{error?.message ?? t('table.errorLoading')}</div>
         ) : (
           <Table>
             <TableHeader>
@@ -81,8 +82,8 @@ export function DataTable({ columns, data, links, setPage, page, isLoading, isEr
                 <TableRow className='hover:bg-transparent'>
                   <TableCell colSpan={table.getVisibleFlatColumns().length} className='h-36 text-center text-muted-foreground'>
                     <div className='flex flex-col items-center justify-center gap-1 py-6'>
-                      <span className='text-base font-medium text-foreground'>No customers found</span>
-                      <span className='text-sm'>Try adjusting your search or filters.</span>
+                      <span className='text-base font-medium text-foreground'>{t('table.noData')}</span>
+                      <span className='text-sm'>{t('table.noDataHint')}</span>
                     </div>
                   </TableCell>
                 </TableRow>

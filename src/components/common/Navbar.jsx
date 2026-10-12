@@ -2,14 +2,14 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { PersonStanding, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
+import logo from '@/assets/home/logo.png';
 export default function Navbar() {
   return (
     <header className='border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50'>
       <div className='container mx-auto px-4 py-4 flex items-center justify-between'>
         <div className='flex items-center space-x-2'>
-          <div className='w-8 h-8 bg-primary rounded-full flex items-center justify-center'>
-            <span className='text-primary-foreground font-bold text-sm'>MS</span>
+          <div className='w-12 h-12  rounded-full flex items-center justify-center'>
+          <img src={logo} alt='logo' className='w-12 h-12' />
           </div>
           <span className='text-xl font-bold text-foreground'>Al Falah Gas Service</span>
         </div>

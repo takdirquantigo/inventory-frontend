@@ -8,8 +8,10 @@ import API from '@/config/config';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import { useDebounce } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export default function Inactive() {
+  const { t } = useTranslation();
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [page, setPage] = useState(1);
@@ -40,8 +42,8 @@ export default function Inactive() {
       <div className='w-full'>
         <div className='flex items-center justify-between'>
           <div>
-            <h2 className='text-2xl font-semibold'>Inactive Customer Management</h2>
-            <p className='text-sm text-muted-foreground'>Manage your Inactive Customer</p>
+            <h2 className='text-2xl font-semibold'>{t('inactive.title')}</h2>
+            <p className='text-sm text-muted-foreground'>{t('inactive.subtitle')}</p>
           </div>
         </div>
         <div className='flex gap-2 items-center mt-4'>
@@ -62,7 +64,7 @@ export default function Inactive() {
             onChange={(e) => setToDate(e.target.value)}
           />
           <Button onClick={() => refetch()} variant='default' className='ml-2'>
-            Apply
+            {t('common.apply')}
           </Button>
           <Button
             onClick={() => {
@@ -71,12 +73,12 @@ export default function Inactive() {
               refetch();
             }}
             variant='outline'>
-            Clear
+            {t('common.clear')}
           </Button>
         </div>
         <div className='py-6'>
           <div className='overflow-hidden rounded-md'>
-            <DataTable columns={columnsDef({})} data={data?.data?.data ?? []} links={data?.data?.links ?? []} setPage={setPage} page={page} isLoading={isLoading} isError={isError} error={error} searchTerm={searchTerm} setSearchTerm={setSearchTerm} isShowSearch={false} />
+            <DataTable columns={columnsDef({ t })} data={data?.data?.data ?? []} links={data?.data?.links ?? []} setPage={setPage} page={page} isLoading={isLoading} isError={isError} error={error} searchTerm={searchTerm} setSearchTerm={setSearchTerm} isShowSearch={false} />
           </div>
         </div>
       </div>

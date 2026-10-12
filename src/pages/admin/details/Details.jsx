@@ -10,10 +10,12 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import API from "@/config/config";
 import PrintButton from "@/components/PrintButton";
+import { useTranslation } from "react-i18next";
 
 const formatDate = (date) => date ? date.toISOString().split("T")[0] : null;
 
 export default function Details() {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const [fromDate, setFromDate] = useState("");
@@ -40,7 +42,7 @@ export default function Details() {
         <Link to='/admin/customers'>
           {' '}
           <Badge variant='secondary' className='ml-auto'>
-            <ArrowLeft /> Go Back
+            <ArrowLeft /> {t('common.goBack')}
           </Badge>
         </Link>
         <Card className="mb-8 mt-3">
@@ -78,7 +80,7 @@ export default function Details() {
                   variant="default"
                   className="ml-2"
                 >
-                  Apply
+                  {t('common.apply')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -88,7 +90,7 @@ export default function Details() {
                   }}
                   variant="outline"
                 >
-                  Clear
+                  {t('common.clear')}
                 </Button>
               </div>
             </CardTitle>
@@ -99,103 +101,103 @@ export default function Details() {
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>Total Cycle</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('details.totalCycle')}</CardTitle>
               <ShoppingCart className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.sales_count || 0} Cylinders</div>
+              <div className='text-2xl font-bold'>{t('details.cylindersCount', { count: data?.analytics?.sales_count || 0 })}</div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>Total Buy</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('details.totalBuy')}</CardTitle>
               <DollarSign className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.total_amount || 0} TK</div>
+              <div className='text-2xl font-bold'>{t('details.amountTk', { amount: data?.analytics?.total_amount || 0 })}</div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>Total Pay</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('details.totalPay')}</CardTitle>
               <Users className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.total_paid || 0} TK</div>
+              <div className='text-2xl font-bold'>{t('details.amountTk', { amount: data?.analytics?.total_paid || 0 })}</div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>Total Due</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('details.totalDue')}</CardTitle>
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{(data?.analytics?.total_amount || 0) - (data?.analytics?.total_paid || 0)} TK</div>
+              <div className='text-2xl font-bold'>{t('details.amountTk', { amount: (data?.analytics?.total_amount || 0) - (data?.analytics?.total_paid || 0) })}</div>
             </CardContent>
           </Card>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8" >
                     <Card  >
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>5 KG</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('cylinders.5kg')}</CardTitle>
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['5kg'] || 0)} / {(data?.analytics?.empty_return?.['5kg'] || 0)}</div>
-              <p className="text-xs text-muted-foreground">Package: {(data?.analytics?.package_quantities?.['5kg'] || 0)}</p>
+              <p className="text-xs text-muted-foreground">{t('details.packageCount', { count: data?.analytics?.package_quantities?.['5kg'] || 0 })}</p>
             </CardContent>
           </Card>
           <Card  >
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>12 KG</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('cylinders.12kg')}</CardTitle>
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['12kg'] || 0)} / {(data?.analytics?.empty_return?.['12kg'] || 0)}</div>
-              <p className="text-xs text-muted-foreground">Package: {(data?.analytics?.package_quantities?.['12kg'] || 0)}</p>
+              <p className="text-xs text-muted-foreground">{t('details.packageCount', { count: data?.analytics?.package_quantities?.['12kg'] || 0 })}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>25 KG</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('cylinders.25kg')}</CardTitle>
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['25kg'] || 0)} / {(data?.analytics?.empty_return?.['25kg'] || 0)}</div>
-              <p className="text-xs text-muted-foreground">Package: {(data?.analytics?.package_quantities?.['25kg'] || 0)}</p>
+              <p className="text-xs text-muted-foreground">{t('details.packageCount', { count: data?.analytics?.package_quantities?.['25kg'] || 0 })}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>33 KG</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('cylinders.33kg')}</CardTitle>
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['33kg'] || 0)} / {(data?.analytics?.empty_return?.['33kg'] || 0)}</div>
-              <p className="text-xs text-muted-foreground">Package: {(data?.analytics?.package_quantities?.['33kg'] || 0)}</p>
+              <p className="text-xs text-muted-foreground">{t('details.packageCount', { count: data?.analytics?.package_quantities?.['33kg'] || 0 })}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>35 KG</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('cylinders.35kg')}</CardTitle>
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['35kg'] || 0)} / {(data?.analytics?.empty_return?.['35kg'] || 0)}</div>
-              <p className="text-xs text-muted-foreground">Package: {(data?.analytics?.package_quantities?.['35kg'] || 0)}</p>
+              <p className="text-xs text-muted-foreground">{t('details.packageCount', { count: data?.analytics?.package_quantities?.['35kg'] || 0 })}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>45 KG</CardTitle>
+              <CardTitle className='text-sm font-medium'>{t('cylinders.45kg')}</CardTitle>
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
               <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['45kg'] || 0)} / {(data?.analytics?.empty_return?.['45kg'] || 0)}</div>
-              <p className="text-xs text-muted-foreground">Package: {(data?.analytics?.package_quantities?.['45kg'] || 0)}</p>
+              <p className="text-xs text-muted-foreground">{t('details.packageCount', { count: data?.analytics?.package_quantities?.['45kg'] || 0 })}</p>
             </CardContent>
           </Card>
 
@@ -203,21 +205,21 @@ export default function Details() {
         </div>
 
         {/* Sales Table */}
-        <h2 className='text-2xl font-bold mb-4'>Latest Sale</h2>
+        <h2 className='text-2xl font-bold mb-4'>{t('details.latestSale')}</h2>
         <Table>
           <TableHeader className='bg-muted'>
             <TableRow>
-              <TableHead className='w-[100px]'>5KG</TableHead>
-              <TableHead className='w-[100px]'>12KG</TableHead>
-              <TableHead>25KG</TableHead>
-              <TableHead>33KG</TableHead>
-              <TableHead className='text-right'>35KG</TableHead>
-              <TableHead className='text-right'>45KG</TableHead>
-              <TableHead className='text-right'>Total</TableHead>
-              <TableHead className='text-right'>Pay</TableHead>
-              <TableHead className='text-right'>Due</TableHead>
-              <TableHead className='text-right'>Date</TableHead>
-              <TableHead className='text-right'>Action</TableHead>
+              <TableHead className='w-[100px]'>{t('cylinders.5kg')}</TableHead>
+              <TableHead className='w-[100px]'>{t('cylinders.12kg')}</TableHead>
+              <TableHead>{t('cylinders.25kg')}</TableHead>
+              <TableHead>{t('cylinders.33kg')}</TableHead>
+              <TableHead className='text-right'>{t('cylinders.35kg')}</TableHead>
+              <TableHead className='text-right'>{t('cylinders.45kg')}</TableHead>
+              <TableHead className='text-right'>{t('common.total')}</TableHead>
+              <TableHead className='text-right'>{t('common.pay')}</TableHead>
+              <TableHead className='text-right'>{t('common.due')}</TableHead>
+              <TableHead className='text-right'>{t('common.date')}</TableHead>
+              <TableHead className='text-right'>{t('common.actions')}</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -260,7 +262,7 @@ export default function Details() {
             ) : (
               <TableRow>
                 <TableCell colSpan={10} className='text-center text-muted-foreground'>
-                  No sales found
+                  {t('details.noSales')}
                 </TableCell>
               </TableRow>
             )}

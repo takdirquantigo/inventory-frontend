@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import AddCollection from './components/AddCollection';
 import { useDebounce } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const getTodayBangladeshYmd = () => {
   const bdDate = new Date(
@@ -23,6 +24,7 @@ const getTodayBangladeshYmd = () => {
 };
 
 export default function Collection() {
+  const { t } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [singleData, setSingleData] = useState(null);
   const [page, setPage] = useState(1);
@@ -58,13 +60,14 @@ export default function Collection() {
 
 const constHandelDelete = async (id) => {
   const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: 'This action cannot be undone!',
+    title: t('confirm.title'),
+    text: t('confirm.text'),
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#d33',
     cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Yes, delete it!',
+    confirmButtonText: t('confirm.yesDelete'),
+    cancelButtonText: t('common.cancel'),
   });
 
   if (!result.isConfirmed) return;
@@ -73,13 +76,13 @@ const constHandelDelete = async (id) => {
     await toast.promise(
       API.delete(`/api/sales/${id}`),
       {
-        loading: 'Deleting...',
+        loading: t('confirm.deleting'),
         success: (res) =>
-          res?.data?.message || 'Deleted successfully!',
+          res?.data?.message || t('confirm.deleted'),
         error: (err) =>
           err?.response?.data?.message ||
           err?.message ||
-          'Something went wrong!',
+          t('confirm.somethingWrong'),
       }
     );
 
@@ -94,16 +97,16 @@ const constHandelDelete = async (id) => {
       <div className='w-full space-y-6'>
         <div className='flex items-center justify-between'>
           <div>
-            <h2 className='text-2xl font-semibold'>Due Bill Collection Management</h2>
-            <p className='text-sm text-muted-foreground'>Manage your Due Bill Collection</p>
+            <h2 className='text-2xl font-semibold'>{t('collection.title')}</h2>
+            <p className='text-sm text-muted-foreground'>{t('collection.subtitle')}</p>
           </div>
-          <Button onClick={() => setOpenModal(true)}>Add Collection</Button>
+          <Button onClick={() => setOpenModal(true)}>{t('collection.add')}</Button>
         </div>
 
         <div className='flex flex-col gap-4 rounded-xl border border-border/60 bg-card/80 p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end'>
           <div className='flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-44'>
             <label className='text-xs font-medium text-muted-foreground' htmlFor='collection-from'>
-              From (Bangladesh)
+              {t('common.fromBd')}
             </label>
             <Input
               id='collection-from'
@@ -118,7 +121,7 @@ const constHandelDelete = async (id) => {
           </div>
           <div className='flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-44'>
             <label className='text-xs font-medium text-muted-foreground' htmlFor='collection-to'>
-              To
+              {t('common.to')}
             </label>
             <Input
               id='collection-to'
@@ -134,17 +137,18 @@ const constHandelDelete = async (id) => {
             variant='outline'
             className='shrink-0'
             onClick={() => {
-              const t = getTodayBangladeshYmd();
-              setFromDate(t);
-              setToDate(t);
+            const today = getTodayBangladeshYmd();
+            setFromDate(today);
+            setToDate(today);
             }}>
-            Today
+            {t('common.today')}
           </Button>
         </div>
 
         <div className='overflow-hidden rounded-xl'>
             <DataTable
               columns={columns({
+                t,
                 setSingleData,
                 constHandelDelete,
                 setOpenModal,
@@ -162,7 +166,7 @@ const constHandelDelete = async (id) => {
         </div>
       </div>
 
-      {openModal && <AddCollection openModal={openModal} setOpenModal={setOpenModal} title={singleData?.id ? 'Edit Collection' : 'Add Collection'} singleData={singleData} setSingleData={setSingleData} />}
+      {openModal && <AddCollection openModal={openModal} setOpenModal={setOpenModal} title={singleData?.id ? t('collection.editTitle') : t('collection.addTitle')} singleData={singleData} setSingleData={setSingleData} />}
     </>
   );
 }

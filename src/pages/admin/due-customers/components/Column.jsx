@@ -9,7 +9,7 @@ const money = (v) => {
   return `${n.toLocaleString()} TK`;
 };
 
-const columns = () => [
+const columns = ({ t } = {}) => [
   {
     id: 'select',
     header: () => <div className="text-center">#</div>,
@@ -21,7 +21,7 @@ const columns = () => [
     accessorKey: 'customer_name',
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-        Customer
+        {t('common.customer')}
         <ArrowUpDown className="ml-1 h-4 w-4" />
       </Button>
     ),
@@ -29,14 +29,14 @@ const columns = () => [
   },
   {
     accessorKey: 'phone',
-    header: () => <div>Phone</div>,
+    header: () => <div>{t('common.phone')}</div>,
     cell: ({ row }) => <div className="text-muted-foreground">{row.getValue('phone') || '—'}</div>,
   },
   {
     accessorKey: 'total_price',
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-        Total billed
+        {t('dueCustomers.totalBilled')}
         <ArrowUpDown className="ml-1 h-4 w-4" />
       </Button>
     ),
@@ -46,7 +46,7 @@ const columns = () => [
     accessorKey: 'total_pay',
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-        Total paid
+        {t('dueCustomers.totalPaid')}
         <ArrowUpDown className="ml-1 h-4 w-4" />
       </Button>
     ),
@@ -56,7 +56,7 @@ const columns = () => [
     accessorKey: 'outstanding_due',
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-        Outstanding
+        {t('dueCustomers.outstanding')}
         <ArrowUpDown className="ml-1 h-4 w-4" />
       </Button>
     ),
@@ -64,11 +64,11 @@ const columns = () => [
   },
   {
     id: 'actions',
-    header: () => <div>Actions</div>,
+    header: () => <div>{t('common.actions')}</div>,
     cell: ({ row }) => (
       <ToggleGroup variant="outline" type="single">
         <Link to={`/admin/customer/${row.original.customer_id}`}>
-          <ToggleGroupItem className="cursor-pointer" value="details" aria-label="Customer details">
+          <ToggleGroupItem className="cursor-pointer" value="details" aria-label={t('customers.detailsAria')}>
             <Settings2 width={20} height={20} />
           </ToggleGroupItem>
         </Link>

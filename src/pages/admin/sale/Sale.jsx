@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDebounce } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const getTodayBangladeshYmd = () => {
   const bdDate = new Date(
@@ -24,6 +25,7 @@ const getTodayBangladeshYmd = () => {
 };
 
 export default function Sale() {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [parPage] = useState(20);
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,23 +66,24 @@ export default function Sale() {
 
   const constHandelDelete = async (id) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'This action cannot be undone!',
+      title: t('confirm.title'),
+      text: t('confirm.text'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: t('confirm.yesDelete'),
+      cancelButtonText: t('common.cancel'),
     });
 
     if (!result.isConfirmed) return;
 
     try {
       await toast.promise(API.delete(`/api/sales/${id}`), {
-        loading: 'Deleting...',
-        success: (res) => res?.data?.message || 'Deleted successfully!',
+        loading: t('confirm.deleting'),
+        success: (res) => res?.data?.message || t('confirm.deleted'),
         error: (err) =>
-          err?.response?.data?.message || err?.message || 'Something went wrong!',
+          err?.response?.data?.message || err?.message || t('confirm.somethingWrong'),
       });
 
       queryClient.invalidateQueries({ queryKey: ['sales'] });
@@ -93,11 +96,11 @@ export default function Sale() {
     <div className='w-full space-y-6'>
       <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
         <div>
-          <h2 className='text-2xl font-semibold tracking-tight'>Sale management</h2>
-          <p className='text-sm text-muted-foreground'>Retail, wholesale, and package sales — filter by date and customer name.</p>
+          <h2 className='text-2xl font-semibold tracking-tight'>{t('sales.title')}</h2>
+          <p className='text-sm text-muted-foreground'>{t('sales.subtitle')}</p>
         </div>
         <Link to='/admin/sale/add'>
-          <Button className='cursor-pointer'>Add sale</Button>
+          <Button className='cursor-pointer'>{t('sales.add')}</Button>
         </Link>
       </div>
 
@@ -109,16 +112,16 @@ export default function Sale() {
         }}
         className='w-full'>
         <TabsList className='grid w-full max-w-lg grid-cols-3 sm:w-fit'>
-          <TabsTrigger value='retail'>Retail</TabsTrigger>
-          <TabsTrigger value='wholesale'>Wholesale</TabsTrigger>
-          <TabsTrigger value='packagesale'>Package sale</TabsTrigger>
+          <TabsTrigger value='retail'>{t('sales.retail')}</TabsTrigger>
+          <TabsTrigger value='wholesale'>{t('sales.wholesale')}</TabsTrigger>
+          <TabsTrigger value='packagesale'>{t('sales.packageSale')}</TabsTrigger>
         </TabsList>
       </Tabs>
 
       <div className='flex flex-col gap-4 rounded-xl border border-border/60 bg-card/80 p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end'>
         <div className='flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-44'>
           <label className='text-xs font-medium text-muted-foreground' htmlFor='sale-from'>
-            From (Bangladesh)
+            {t('common.fromBd')}
           </label>
           <Input
             id='sale-from'
@@ -133,7 +136,7 @@ export default function Sale() {
         </div>
         <div className='flex min-w-0 flex-1 flex-col gap-1.5 sm:max-w-44'>
           <label className='text-xs font-medium text-muted-foreground' htmlFor='sale-to'>
-            To
+            {t('common.to')}
           </label>
           <Input
             id='sale-to'
@@ -149,17 +152,17 @@ export default function Sale() {
           variant='outline'
           className='shrink-0'
           onClick={() => {
-            const t = getTodayBangladeshYmd();
-            setFromDate(t);
-            setToDate(t);
+            const today = getTodayBangladeshYmd();
+            setFromDate(today);
+            setToDate(today);
           }}>
-          Today
+          {t('common.today')}
         </Button>
       </div>
 
       <div className='overflow-hidden rounded-xl'>
         <DataTable
-          columns={columns({ constHandelDelete })}
+          columns={columns({ t, constHandelDelete })}
           data={data?.data?.data ?? []}
           links={data?.data?.links ?? []}
           setPage={setPage}

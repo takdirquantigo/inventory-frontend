@@ -14,8 +14,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function AddStoke() {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -42,15 +44,15 @@ export default function AddStoke() {
       await toast.promise(
         API.post('/api/products', payload),
         {
-          loading: 'Saving...',
+          loading: t('toast.saving'),
           success: (res) => {
-            toast.success('Stock saved successfully!');
+            toast.success(t('stock.saved'));
             queryClient.invalidateQueries({ queryKey: ['products'] });
             reset();
             navigate('/admin/stoke');
           },
           error: (err) => {
-            toast.error(err.response?.data?.message || 'Something went wrong');
+            toast.error(err.response?.data?.message || t('toast.somethingWrong'));
           },
         }
       );
@@ -68,32 +70,32 @@ export default function AddStoke() {
   return (
     <Card className='w-full'>
       <CardHeader>
-        <CardTitle>Add Stoke</CardTitle>
-        <CardDescription>Add new stock entry</CardDescription>
+        <CardTitle>{t('stock.addTitle')}</CardTitle>
+        <CardDescription>{t('stock.addDesc')}</CardDescription>
       </CardHeader>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6'>
-          <InputField id='five_kg' type='number' className='bg-white' label='5 KG' register={register} error={errors.five_kg} />
-          <InputField id='twelve_kg' type='number' className='bg-white' label='12 KG' register={register} error={errors.twelve_kg} />
-          <InputField id='twentyfive_kg' type='number' className='bg-white' label='25 KG' register={register} error={errors.twentyfive_kg} />
-          <InputField id='thirtythree_kg' type='number' className='bg-white' label='33 KG' register={register} error={errors.thirtythree_kg} />
-          <InputField id='thirtyfive_kg' type='number' className='bg-white' label='35 KG' register={register} error={errors.thirtyfive_kg} />
-          <InputField id='fourtyfive_kg' type='number' className='bg-white' label='45 KG' register={register} error={errors.fourtyfive_kg} />
+          {/* <InputField id='five_kg' type='number' className='bg-white' label='5 KG' register={register} error={errors.five_kg} /> */}
+          <InputField id='twelve_kg' type='number' className='bg-white' label={t('cylinders.12kg')} register={register} error={errors.twelve_kg} />
+          {/* <InputField id='twentyfive_kg' type='number' className='bg-white' label='25 KG' register={register} error={errors.twentyfive_kg} /> */}
+          {/* <InputField id='thirtythree_kg' type='number' className='bg-white' label='33 KG' register={register} error={errors.thirtythree_kg} /> */}
+          <InputField id='thirtyfive_kg' type='number' className='bg-white' label={t('cylinders.35kg')} register={register} error={errors.thirtyfive_kg} />
+          <InputField id='fourtyfive_kg' type='number' className='bg-white' label={t('cylinders.45kg')} register={register} error={errors.fourtyfive_kg} />
           {/* <InputField id='others_kg' type='number' className='bg-white' label='Others KG' register={register} error={errors.others_kg} /> */}
 
-          <InputField id='empty_five_kg' type='number' className='bg-white' label='Empty 5 KG' register={register} error={errors.empty_five_kg} />
-          <InputField id='empty_twelve_kg' type='number' className='bg-white' label='Empty 12 KG' register={register} error={errors.empty_twelve_kg} />
-          <InputField id='empty_twentyfive_kg' type='number' className='bg-white' label='Empty 25 KG' register={register} error={errors.empty_twentyfive_kg} />
-          <InputField id='empty_thirtythree_kg' type='number' className='bg-white' label='Empty 33 KG' register={register} error={errors.empty_thirtythree_kg} />
-          <InputField id='empty_thirtyfive_kg' type='number' className='bg-white' label='Empty 35 KG' register={register} error={errors.empty_thirtyfive_kg} />
-          <InputField id='empty_fourtyfive_kg' type='number' className='bg-white' label='Empty 45 KG' register={register} error={errors.empty_fourtyfive_kg} />
+          {/* <InputField id='empty_five_kg' type='number' className='bg-white' label='Empty 5 KG' register={register} error={errors.empty_five_kg} /> */}
+          <InputField id='empty_twelve_kg' type='number' className='bg-white' label={t('cylinders.empty12kg')} register={register} error={errors.empty_twelve_kg} />
+          {/* <InputField id='empty_twentyfive_kg' type='number' className='bg-white' label='Empty 25 KG' register={register} error={errors.empty_twentyfive_kg} /> */}
+          {/* <InputField id='empty_thirtythree_kg' type='number' className='bg-white' label='Empty 33 KG' register={register} error={errors.empty_thirtythree_kg} /> */}
+          <InputField id='empty_thirtyfive_kg' type='number' className='bg-white' label={t('cylinders.empty35kg')} register={register} error={errors.empty_thirtyfive_kg} />
+          <InputField id='empty_fourtyfive_kg' type='number' className='bg-white' label={t('cylinders.empty45kg')} register={register} error={errors.empty_fourtyfive_kg} />
           {/* <InputField id='empty_others_kg' type='number' className='bg-white' label='Empty Others KG' register={register} error={errors.empty_others_kg} /> */}
 
-          <InputField id='price' type='number' className='bg-white' label='Price' register={register} error={errors.price} />
+          <InputField id='price' type='number' className='bg-white' label={t('common.price')} register={register} error={errors.price} />
 
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Date</label>
+            <label className='text-sm font-medium'>{t('common.date')}</label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -104,7 +106,7 @@ export default function AddStoke() {
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {selectedDate
                     ? format(selectedDate, "dd-MM-yyyy")
-                    : "Pick a date"}
+                    : t('common.pickDate')}
                 </Button>
               </PopoverTrigger>
 
@@ -135,7 +137,7 @@ export default function AddStoke() {
           </div>
 
           <div className='flex gap-2 items-center'>
-            <Label>Is Package?</Label>
+            <Label>{t('common.isPackage')}</Label>
 
             <div>
               <Switch checked={isPackage} onCheckedChange={setIsPackage} className='data-[state=unchecked]:bg-red-500 data-[state=checked]:bg-green-500' />
@@ -145,7 +147,7 @@ export default function AddStoke() {
 
         <CardFooter className='flex justify-end'>
           <Button type='submit' disabled={isSubmitting} className='flex items-center gap-2'>
-            <Save className='w-4 h-4' /> Save
+            <Save className='w-4 h-4' /> {t('common.save')}
           </Button>
         </CardFooter>
       </form>

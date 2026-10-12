@@ -14,6 +14,7 @@ import makeAnimated from 'react-select/animated';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 
@@ -24,6 +25,7 @@ export default function AddCollection({
   singleData,
   setSingleData,
 }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const {
@@ -61,7 +63,7 @@ export default function AddCollection({
         }));
         setCustomer(responseData);
       } catch (err) {
-        toast.error('Failed to fetch customers');
+        toast.error(t('collection.fetchCustomersFailed'));
       }
     };
     fetchCustomers();
@@ -75,7 +77,7 @@ export default function AddCollection({
         const response = await API.get(`api/sales/details/${selectedCustomer?.value}`);
         setDetails(response.data);
       } catch (err) {
-        toast.error('Failed to fetch customer details');
+        toast.error(t('collection.fetchDetailsFailed'));
       }
     };
     fetchDetails();
@@ -83,19 +85,19 @@ export default function AddCollection({
 
   const onSubmit = async (data) => {
     if (!data.pay) {
-      toast.error('Pay is required');
+      toast.error(t('collection.payRequired'));
       return;
     }
     if (!selectedCustomer) {
-      toast.error('Customer is required');
+      toast.error(t('sales.customerRequired'));
       return;
     }
     if (!data.date) {
-      toast.error('Date is required');
+      toast.error(t('sales.dateRequired'));
       return;
     }
     if(details?.totalDue && data.pay > details.totalDue) {
-      toast.error('Pay cannot be greater than total due');
+      toast.error(t('collection.payExceedsDue'));
       return;
     }
 
@@ -106,9 +108,9 @@ export default function AddCollection({
     await toast.promise(
       API.post('/api/sales/collection', data),
       {
-        loading: 'Saving...',
-        success: 'Customer saved successfully!',
-        error: (error) => error.response?.data?.message || 'Something went wrong',
+        loading: t('toast.saving'),
+        success: t('collection.saved'),
+        error: (error) => error.response?.data?.message || t('toast.somethingWrong'),
       }
     );
 
@@ -135,6 +137,7 @@ export default function AddCollection({
             options={customer}
             onChange={(val) => setSelectedCustomer(val)}
             value={selectedCustomer}
+            placeholder={t('common.selectCustomer')}
           />
         </div>
 
@@ -144,7 +147,7 @@ export default function AddCollection({
             id="pay"
             type="number"
             className="bg-white"
-            label="Pay"
+            label={t('common.pay')}
             register={register}
             error={errors.pay}
           />
@@ -152,7 +155,7 @@ export default function AddCollection({
 
         {/* Date Picker */}
         <div className="mt-4 w-full">
-          <label className="text-sm font-medium">Date</label>
+          <label className="text-sm font-medium">{t('common.date')}</label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -161,7 +164,7 @@ export default function AddCollection({
                 className="justify-start text-left font-normal w-full"
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(new Date(date), 'dd-MM-yyyy') : 'Pick a date'}
+                {date ? format(new Date(date), 'dd-MM-yyyy') : t('common.pickDate')}
               </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="p-0">
@@ -180,7 +183,7 @@ export default function AddCollection({
         {/* Customer details */}
         {details && (
           <div className="mt-4">
-            <p>Total Due: {details?.totalDue} TK</p>
+            <p>{t('collection.totalDue', { amount: details?.totalDue })}</p>
           </div>
         )}
 
@@ -192,7 +195,7 @@ export default function AddCollection({
           className="btn btn-primary-light cursor-pointer font-semibold w-full"
         >
           <Save className="mr-2" />
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+          {isSubmitting ? t('common.submitting') : t('common.submit')}
         </Button>
       </form>
     </Modal>
